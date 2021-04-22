@@ -1,8 +1,8 @@
 import React from "react";
 import '../../assets/css/login/login.css';
-import { loginConstant } from '../../constants/login/login';
-import { IS_LOGIN, LOGIN_STATUS_TEXT } from "../../constants/login/login";
-import { LOGIN } from "../../action/login/login";
+import { loginConstant } from '../../constants/login/login.constant';
+import { IS_LOGIN, LOGIN_STATUS_TEXT } from "../../constants/login/login.constant";
+import { LOGIN } from "../../action/login/login.action";
 import { connect } from 'react-redux';
 
 class Login extends React.Component {

@@ -1,5 +1,5 @@
 
-import { IS_LOGIN } from "../../constants/login/login";
+import { IS_LOGIN } from "../../constants/login/login.constant";
 
 const initialState = {
     [IS_LOGIN]: false,

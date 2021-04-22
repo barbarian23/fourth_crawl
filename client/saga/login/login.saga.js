@@ -1,8 +1,8 @@
 import { takeLatest, take, put, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
-import { LOGIN } from "../../action/login/login"; loginConstant
-import { IS_LOGIN, LOGIN_STATUS_TEXT } from "../../constants/login/login";
-import { loginConstant } from "../../constants/login/login";
+import { LOGIN } from "../../action/login/login.action"; loginConstant
+import { IS_LOGIN, LOGIN_STATUS_TEXT } from "../../constants/login/login.constant";
+import { loginConstant } from "../../constants/login/login.constant";
 import sseClient from "../../service/sse";
 //import {chromeOption} from "../../service/selenium";
 //import {excelEntity} from "../../service/excel";

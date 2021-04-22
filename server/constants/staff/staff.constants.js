@@ -1,1 +1,0 @@
-export const GET_ALL_STAFF_URL = "getAllStaff";

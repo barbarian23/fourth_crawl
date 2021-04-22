@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import Home from "../client/screen/home/home";
-import Login from "../client/screen/login/login";
+import Home from "./screen/home/home.screen";
+import Login from "./screen/login/login.screen";
 import { COMMON_REACTJS_OBJECT, COMMON_REACTJS_KEY } from "../common/constants/common.constants";
 
 class MainRouter extends React.Component {
