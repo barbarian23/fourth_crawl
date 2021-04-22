@@ -20,3 +20,5 @@ export const COMMON_SERVER_KEY = {
 }
 
 export const PORT = 3000;
+
+export const ECLECTRON_LOAD = "http://localhost:3000";
