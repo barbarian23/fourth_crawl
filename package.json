@@ -5,7 +5,7 @@
   "main": "server/controller/reactjs/electron.js",
   "scripts": {
     "build": "webpack --mode=production",
-    "dev": "webpack && concurrently \"webpack --watch\" \"nodemon dist/index.js\"",
+    "dev": "webpack && concurrently \"webpack --watch\" \"nodemon --delay 1 dist/index.js\"",
     "test": "npm run webpack && concurrently \"npm run webpack --watch\" \"mocha --watch\"",
     "copy_static_assets": "node copyStaticAssets.js",
     "electron-build": "electron-builder",
@@ -16,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
+    "chromedriver": "^90.0.0",
     "cors": "^2.8.5",
     "electron-is-dev": "^1.2.0",
     "excel4node": "^1.7.2",

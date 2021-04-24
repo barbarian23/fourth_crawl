@@ -57,6 +57,9 @@ const serverConfig = {
     module: {
         rules: [js, css, file],
     },
+    watchOptions: {
+        poll: 1000, // Check for changes every second
+    },
     output: {
         path: path.resolve(__dirname, "dist"),
         filename: "[name].js",
@@ -81,6 +84,9 @@ const clientConfig = {
     },
     module: {
         rules: [js, css, file],
+    },
+    watchOptions: {
+        poll: 1000, // Check for changes every second
     },
     optimization: {
         // 1
@@ -135,7 +141,7 @@ const clientConfig = {
             template: './server/controller/reactjs/index.html',
             filename: './index.html'
         }),
-        new HtmlWebpackIncludeAssetsPlugin({append: true })
+        new HtmlWebpackIncludeAssetsPlugin({ append: true })
         // new HtmlWebpackPlugin({
         //     template: __dirname + '/client/template.html',
         //     inject: 'body',

@@ -1,24 +1,15 @@
-export const COMMON_REACTJS_OBJECT = {
-    COMMON_REACTJS_URL_LOGIN: "/login",
-    COMMON_REACTJS_URL_HOME: "/home"
-};
+//client
+export const CLIENT_LOGIN = "/login";
+export const CLIENT_HOME = "/home";
+export const CLIENT = "/client";
 
-export const COMMON_REACTJS_KEY = {
-    COMMON_REACTJS_URL_LOGIN: "COMMON_REACTJS_URL_LOGIN",
-    COMMON_REACTJS_URL_HOME: "COMMON_REACTJS_URL_HOME"
-}
+//socket
+export const SOCKET_LOGIN = "login";
+export const SOCKET_LOGIN_STATUS = "login-status";
+export const SOCKET_WORKING_SINGLE_NUMBER = "work-single-number";
+export const SOCKET_WORKING_LIST_NUMBER = "work-list-number";
 
-//crawl
-export const COMMON_SERVER_OBJECT = {
-    COMMON_SERVER_DOCRAWL: "/docrawl",
-    COMMON_SERVER_CRAWLLOGIN: "/crawllogin",
-};
-
-export const COMMON_SERVER_KEY = {
-    COMMON_SERVER_DOCRAWL: "COMMON_SERVER_DOCRAWL",
-    COMMON_SERVER_CRAWLLOGIN: "COMMON_SERVER_CRAWLLOGIN",
-}
-
+//chung
 export const PORT = 3000;
-
-export const ECLECTRON_LOAD = "http://localhost:3000";
+export const MAIN_URL = "http://localhost:" + PORT;
+export const ECLECTRON_LOAD = "http://localhost:" + PORT;

@@ -1,10 +1,11 @@
 
-import { IS_LOGIN } from "../../constants/login/login.constant";
+//import { IS_LOGIN } from "../../constants/login/login.constant";
 
 const initialState = {
-    [IS_LOGIN]: false,
+    isLogin: false,
     username: "",
     password: "",
+    loginStatusText: "Đang đăng nhập"
 };
 
 const mapKey = new Map([
