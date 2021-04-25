@@ -28,9 +28,9 @@ const doLogin = function (data) {
 }
 
 const login = function* (action) {
-    //gọi hàm lắng nghe socket
     yield put({ type: LOGIN_STATUS_TEXT, value: loginConstant.logining });
-    //laasy vee fkeest quar cuar event channel redux
+    
+    //gọi hàm lắng nghe socket
     let result = yield call(doLogin, action);
 
     //kết quả của socket

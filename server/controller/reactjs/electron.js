@@ -3,8 +3,8 @@ const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const path = require("path");
 const isDev = require("electron-is-dev");
+const ECLECTRON_LOAD = require("../../../common/constants/common.constants");
 
-import { ECLECTRON_LOAD } from "../../../common/constants/common.constants";
 
 let mainWindow;
 function createWindow() {

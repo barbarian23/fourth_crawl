@@ -17,8 +17,8 @@ const workingController = function (server) {
 
 const login = function(data){
     console.log(data.username, data.password);
-    socket.send(SOCKET_LOGIN_STATUS,{data:"yea1"});
-    seleniumInsstance.goto("https://google.com");
+    socket.send(SOCKET_LOGIN_STATUS,{data:""});
+    seleniumInsstance.goto(HOME_URL);
 }
 
 export default workingController;

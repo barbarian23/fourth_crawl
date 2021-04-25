@@ -1,5 +1,6 @@
 const initialState = {
     something: undefined,
+    listNumber:[],
 };
 
 const mapKey = new Map([

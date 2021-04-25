@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 // app.use("/*",router); - chỉ dùng với đối tượng app.router, ở đây đang dùng socket với htttp createserver
 //tất cả các đường url đều render ra reactjs
 //client và server giao tipees qua socket
-app.all("/login",router);
+app.all("/*",router);
 
 const http = require('http');
 const server = http.createServer(app);

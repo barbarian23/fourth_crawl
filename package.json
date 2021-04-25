@@ -2,15 +2,15 @@
   "name": "ssr",
   "version": "1.0.0",
   "description": "",
-  "main": "server/controller/reactjs/electron.js",
+  "main": "./server/controller/reactjs/electron.js",
   "scripts": {
     "build": "webpack --mode=production",
     "dev": "webpack && concurrently \"webpack --watch\" \"nodemon --delay 1 dist/index.js\"",
-    "test": "npm run webpack && concurrently \"npm run webpack --watch\" \"mocha --watch\"",
-    "copy_static_assets": "node copyStaticAssets.js",
     "electron-build": "electron-builder",
     "release": "webpack --mode production && npm run electron-build",
-    "start": "concurrently \"cross-env BROWSER=none npm run dev\" \"wait-on http://localhost:3000 && electron .\""
+    "start": "concurrently \"cross-env BROWSER=none npm run dev\" \"wait-on http://localhost:3000 && npm run electron\"",
+    "electron-js": "concurrently \"cross-env BROWSER=none npm run dev\" \"wait-on http://localhost:3000 && npm run electron\"",
+    "electron": "electron ."
   },
   "author": "",
   "license": "ISC",
@@ -19,19 +19,21 @@
     "chromedriver": "^90.0.0",
     "cors": "^2.8.5",
     "electron-is-dev": "^1.2.0",
-    "excel4node": "^1.7.2",
     "express": "^4.17.1",
+    "file-saver": "^2.0.5",
     "http": "0.0.1-security",
     "iedriver": "^3.150.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",
     "react-router-dom": "^5.2.0",
+    "read-excel-file": "^5.1.0",
     "redux": "^4.0.5",
     "redux-saga": "^1.1.3",
     "selenium-webdriver": "^4.0.0-alpha.8",
     "socket.io": "^3.0.5",
-    "socket.io-client": "^3.0.5"
+    "socket.io-client": "^3.0.5",
+    "xlsx": "^0.16.9"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",

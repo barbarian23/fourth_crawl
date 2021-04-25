@@ -1,32 +1,65 @@
-var webdriver = require('selenium-webdriver');
-var ie = require('selenium-webdriver/ie');
-var iedriver = require('iedriver');
+const webdriver = require('selenium-webdriver');
+const ie = require('selenium-webdriver/ie');
+const iedriver = require('iedriver');
+
+const chrome = require('selenium-webdriver/chrome');
+const chromedriver = require('chromedriver');
+
+const path = require('path')
 
 var ieOption = null, driver = null;
 
+//nack lại 1 level, vì dirname đnag chạy wor folder dist
+const driverfolder = path.join(__dirname, '../');;
+
 function seleniumCrawl() {
     function getOption() {
-        return new ie.Options().addArguments('--ignore-certificate-errors').addArguments('--ignore-ssl-errors').addArguments('--disable-single-click-autofill')
+
+        //chrome
+        return new chrome.Options().addArguments("start-maximized") // open Browser in maximized mode
+            .addArguments("disable-infobars") // disabling infobars
+            .addArguments("--disable-extensions") // disabling extensions
+            .addArguments("--disable-gpu") // applicable to windows os only
+            .addArguments("--disable-dev-shm-usage")// overcome limited resource problems
+            .addArguments("--no-sandbox"); // Bypass OS security model
+        // chromeOptions.addArguments("--remote-debugging-port=9222");
+        // chromeOptions.addArguments("--no-sandbox") ;
+        // chromeOptions.addArguments("--disable-setuid-sandbox") ;
+        // chromeOptions.addArguments("--disable-dev-shm-using") ;
+        // chromeOptions.addArguments("--disable-extensions") ;
+        // chromeOptions.addArguments("--disable-gpu") ;
+        // chromeOptions.addArguments("start-maximized") ;
+        // chromeOptions.addArguments("disable-infobars");
+
+        //ie
+        //return new ie.Options().addArguments('--ignore-certificate-errors').addArguments('--ignore-ssl-errors').addArguments('--disable-single-click-autofill')
     };
 
     function getCrawler() {
-        return new webdriver.Builder()
-            .setIeOptions(getOption())
-            .withCapabilities(webdriver.Capabilities.ie()).build();
+        console.log(driverfolder);
+
+        //chrome
+        return new webdriver.Builder().forBrowser('chrome')
+        //chromeOptions.setChromeBinaryPath(driverfolder + "driver\\chrome.exe");
+        .setChromeOptions(getOption()).withCapabilities(webdriver.Capabilities.chrome()).build();
+
+        // return new webdriver.Builder()
+        //     .setIeOptions(getOption())
+        //     .withCapabilities(webdriver.Capabilities.ie()).build();
     }
 
     let driver = {
         option: null,
         crawler: null,
-        init:function(){
-            if(!this.option || !this.crawler){
+        init: function () {
+            if (!this.option || !this.crawler) {
                 this.option = getOption();
                 this.crawler = getCrawler();
             }
         },
         goto: async function (path) {
             try {
-                if(!this.option || !this.crawler){
+                if (!this.option || !this.crawler) {
                     this.init();
                 }
                 await this.crawler.get(path);
@@ -37,7 +70,7 @@ function seleniumCrawl() {
 
         getInnerTextByPath: async function (path) {
             try {
-                if(!this.option || !this.crawler){
+                if (!this.option || !this.crawler) {
                     this.init();
                 }
                 return await this.crawler.findElement(webdriver.By.css(path)).getText();
@@ -48,7 +81,7 @@ function seleniumCrawl() {
 
         inputTextByPath: async function (path, text) {
             try {
-                if(!this.option || !this.crawler){
+                if (!this.option || !this.crawler) {
                     this.init();
                 }
                 await this.crawler.findElement(webdriver.By.css(path)).sendKeys(text);
@@ -59,7 +92,7 @@ function seleniumCrawl() {
 
         clearInputByPath: async function (path) {
             try {
-                if(!this.option || !this.crawler){
+                if (!this.option || !this.crawler) {
                     this.init();
                 }
                 await this.crawler.findElement(webdriver.By.css(path)).clear();
@@ -70,7 +103,7 @@ function seleniumCrawl() {
 
         clickByPath: async function (path) {
             try {
-                if(!this.option || !this.crawler){
+                if (!this.option || !this.crawler) {
                     this.init();
                 }
                 await this.crawler.findElement(webdriver.By.css(path)).click();
@@ -81,7 +114,7 @@ function seleniumCrawl() {
 
         executeScript: async function (script) {
             try {
-                if(!this.option || !this.crawler){
+                if (!this.option || !this.crawler) {
                     this.init();
                 }
                 return await this.crawler.executeScript(script);
@@ -93,7 +126,7 @@ function seleniumCrawl() {
 
         waitForScriptDone: async function (script, status) {
             try {
-                if(!this.option || !this.crawler){
+                if (!this.option || !this.crawler) {
                     this.init();
                 }
                 await this.crawler.wait(function () {
@@ -108,7 +141,7 @@ function seleniumCrawl() {
         },
         isDisplay: async function (path) {
             try {
-                if(!this.option || !this.crawler){
+                if (!this.option || !this.crawler) {
                     this.init();
                 }
                 return await this.crawler.findElement(webdriver.By.css(path)).isDisplayed();

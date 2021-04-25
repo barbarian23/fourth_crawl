@@ -3,6 +3,7 @@
 
 const initialState = {
     isLogin: false,
+    isLoginSuccess: false,
     username: "",
     password: "",
     loginStatusText: "Đang đăng nhập"
