@@ -22,3 +22,9 @@ td{
     background: #f50057;
     font-weight: 600;
 }
+
+.edit{
+    border-radius: 10;
+    background: #ff7900;
+    font-weight: 600;
+}

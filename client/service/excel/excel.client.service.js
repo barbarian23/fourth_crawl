@@ -11,13 +11,13 @@ import * as XLSX from 'xlsx';
 export function readFileExcel(file, callback) {
     console.log(file);
     readXlsxFile(file).then((rows) => {
-        console.log(rows);
+        // console.log(rows);
         callback(rows);
     })
 }
 
 
-export async function createFile(sample) {
+export async function createFileExcel(sample) {
     const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
     const fileExtension = '.xlsx';
 

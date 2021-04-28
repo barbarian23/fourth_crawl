@@ -1,19 +1,20 @@
 import { takeLatest, take, put, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import { homeConstant } from "../../constants/home/home.constant";
+import { ADD_NUMBER } from "../../action/home/home.action";
 import socketClient from "../../service/socket/socket.client.service";
-import { SOCKET_LOGIN, MAIN_URL, SOCKET_LOGIN_STATUS } from "../../../common/constants/common.constants";
+import { SOCKET_WORKING_SINGLE_NUMBER, MAIN_URL } from "../../../common/constants/common.constants";
 
-const listenerToServer = function (data) {
-    console.log("doLogin", data);
+const socket = new socketClient(MAIN_URL);
+
+const homeSocket = function (data) {
+    console.log("homeSocket", data);
     return eventChannel(emitter => {
-        const socket = new socketClient(MAIN_URL);
-
         //gửi
-        socket.send(SOCKET_LOGIN, { username: data.value.username, password: data.value.password });
+        socket.send(SOCKET_WORKING_SINGLE_NUMBER, { data: data.value.number });
 
         //nhận
-        socket.receive(SOCKET_LOGIN_STATUS, function (data) {
+        socket.receive("", function (data) {
             console.log("from server", data);
             emitter(data);
         });
@@ -25,9 +26,9 @@ const listenerToServer = function (data) {
     });
 }
 
-const home = function* (action) {
+const addNumber = function* (action) {
     //laasy vee fkeest quar cuar event channel redux
-    let result = yield call(listenerToServer, action);
+    let result = yield call(homeSocket, action);
 
     //kết quả của socket
     while (true) {
@@ -38,6 +39,8 @@ const home = function* (action) {
     }
 }
 
+
+
 export const watchHome = function* () {
-    yield takeLatest(LOGIN, login);
+   yield takeLatest(ADD_NUMBER, addNumber);
 }

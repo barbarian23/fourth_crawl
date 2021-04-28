@@ -2,10 +2,15 @@ export const homeConstant = {
     login: "Đăng nhập",
 }
 
+export const TH_STT = "Số thứ tự";
 export const TH_PHONE = "Số điện thoại";
 export const TH_MONEY = "Số tiền";
 export const TH_INFO = "Thông tin nạp thẻ";
 export const TH_TRACK = "Theo dõi";
+
+export const TH_EDIT = "Sửa";
+export const TH_DELETE = "Xóa";
+export const TH_DONE = "Hoàn tất";
 
 
 export const TR_TYPE_NUMBER = "Nhập số điện thoại";

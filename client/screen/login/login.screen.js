@@ -3,7 +3,7 @@ import '../../assets/css/login/login.css';
 import { useHistory } from 'react-router-dom';
 import { loginConstant } from '../../constants/login/login.constant';
 import { LOGIN } from "../../action/login/login.action";
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
 
 export default function login(props) {
 

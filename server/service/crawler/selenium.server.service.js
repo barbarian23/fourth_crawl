@@ -1,9 +1,11 @@
 const webdriver = require('selenium-webdriver');
+//ie
 const ie = require('selenium-webdriver/ie');
-const iedriver = require('iedriver');
+//const iedriver = require('iedriver');
 
+//chrome
 const chrome = require('selenium-webdriver/chrome');
-const chromedriver = require('chromedriver');
+//const chromedriver = require('chromedriver');
 
 const path = require('path')
 

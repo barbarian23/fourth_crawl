@@ -1,18 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import '../../assets/css/home/home.css';
-import { TH_PHONE, TH_MONEY, TH_INFO, TH_TRACK, TR_TYPE_NUMBER, TR_TYPE_MONEY, TR_TYPE_ADD, sampleData } from "../../constants/home/home.constant";
-import { readFileExcel, createFile } from "../../service/excel/excel.client.service";
+import { TH_STT, TH_PHONE, TH_MONEY, TH_INFO, TH_TRACK, TR_TYPE_NUMBER, TR_TYPE_MONEY, TR_TYPE_ADD, sampleData } from "../../constants/home/home.constant";
+import { ADD_PHONE } from "../../action/home/home.action";
+import { readFileExcel, createFileExcel } from "../../service/excel/excel.client.service";
+import { useSelector, useDispatch } from 'react-redux';
 
 export default function Home() {
-    let { number, setNumber } = useState("");
+    let { phone, setPhone } = useState("");
     let { money, setMoney } = useState("");
-    let { listNumber, setListNumber } = useState([]);
+
+    let listPhone = useSelector(state => state.home.listPhone);
+
+    useEffect(() => {
+        console.log("current list phone");
+    }, [listPhone]);
 
     let readFile = (e) => {
         readFileExcel(e.target.files[0], (data) => {
             //data là mảng chứa danh sách thuê bao và số tiền
-            data.forEach((item,index)=>{
-
+            data.forEach((item, index) => {
+                //Bỏ qua dòng đầu vì là tiêu đề
+                if (index > 0) {
+                    useDispatch({ type: ADD_PHONE, value: item });
+                }
             });
         });
 
@@ -21,49 +31,42 @@ export default function Home() {
     }
 
     let downloadFile = (e) => {
-        createFile(sampleData);
+        createFileExcel(sampleData);
+    }
 
-        // let link = document.createElement("a");
-        // if (link.download !== undefined) { // feature detection
-        //     // Browsers that support HTML5 download attribute
-        //     let url = URL.createObjectURL(blob);
-        //     link.setAttribute("href", url);
-        //     link.setAttribute("download", exportedFilename);
-        //     link.style.visibility = 'hidden';
-        //     document.body.appendChild(link);
-        //     link.click();
-        //     document.body.removeChild(link);
+    let onInputPhone = (e) => {
+        setPhone(e.target.value);
+    }
 
-        // }
+    let onInputMoney = (e) => {
+        setMoney(e.target.value);
+    }
+
+    let addNew = () => {
+        useDispatch({ type: ADD_PHONE, value: { phone: phone, money: money } });
     }
 
     return (
         <div className="crawl-login" id="div_craw">
             <div className="crawl-login-crawl">
-                {/* <div className="crawl-login-number-delay" id="div_delay_time">
-                    <span>Thời gian nghỉ</span> <input type="number" id="second_crawl" max="60" min="1"
-                        value="1" /><span>giây</span>
-                </div> */}
                 <table>
                     <tbody>
                         <tr>
+                            <th>{TH_STT}</th>
                             <th>{TH_PHONE}</th>
                             <th>{TH_MONEY}</th>
                             <th>{TH_INFO}</th>
                             <th>{TH_TRACK}</th>
                         </tr>
-                        <tr>
-                            <td>{TH_PHONE}</td>
-                            <td>{TH_MONEY}</td>
-                            <td>{TH_INFO}</td>
-                            <td>{TH_TRACK}</td>
-                        </tr>
                     </tbody>
                 </table>
+
+                <div className="divTextStatus"></div>
+
                 <div className="input-add-div">
-                    <input className="input-add" type="text" placeholder={TR_TYPE_NUMBER} />
-                    <input className="input-add" type="text" placeholder={TR_TYPE_MONEY} />
-                    <input className="input-add-button" type="button" value={TR_TYPE_ADD} />
+                    <input className="input-add" type="text" placeholder={TR_TYPE_NUMBER} onChange={onInputPhone}/>
+                    <input className="input-add" type="text" placeholder={TR_TYPE_MONEY} onChange={onInputMoney}/>
+                    <input className="input-add-button" type="button" value={TR_TYPE_ADD} onClick={addNew}/>
                 </div>
 
                 <div id="crawl_login_file_input_up">

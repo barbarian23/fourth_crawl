@@ -19,6 +19,12 @@ th{
 
 td{
     border-style: double;
+    word-break: break-word;
+}
+
+.divTextStatus{
+    font-size: 15px;
+    margin-top: 10px;
 }
 
 #xlsx{
@@ -431,6 +437,7 @@ td{
 /* width */
 ::-webkit-scrollbar {
     width: 5px;
+    height: 5px;
   }
   
   /* Track */

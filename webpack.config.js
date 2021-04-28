@@ -46,7 +46,7 @@ const file = {
 
 const serverConfig = {
     mode: "development",
-    target: "node",
+    target: "electron-renderer",
     node: {
         __dirname: false,
     },
