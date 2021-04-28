@@ -26,6 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 //client và server giao tipees qua socket
 app.all("/*",router);
 
+//socket
 const http = require('http');
 const server = http.createServer(app);
 

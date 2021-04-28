@@ -58,15 +58,27 @@ export default function Home() {
                             <th>{TH_INFO}</th>
                             <th>{TH_TRACK}</th>
                         </tr>
+                        {
+                            listPhone 
+                            ?
+                            listPhone.forEach((item, index) => {
+                                <row
+                                    data={item}
+                                    key={index}
+                                />
+                            })
+                            :
+                            null
+                        }
                     </tbody>
                 </table>
 
                 <div className="divTextStatus"></div>
 
                 <div className="input-add-div">
-                    <input className="input-add" type="text" placeholder={TR_TYPE_NUMBER} onChange={onInputPhone}/>
-                    <input className="input-add" type="text" placeholder={TR_TYPE_MONEY} onChange={onInputMoney}/>
-                    <input className="input-add-button" type="button" value={TR_TYPE_ADD} onClick={addNew}/>
+                    <input className="input-add" type="text" placeholder={TR_TYPE_NUMBER} onChange={onInputPhone} />
+                    <input className="input-add" type="text" placeholder={TR_TYPE_MONEY} onChange={onInputMoney} />
+                    <input className="input-add-button" type="button" value={TR_TYPE_ADD} onClick={addNew} />
                 </div>
 
                 <div id="crawl_login_file_input_up">

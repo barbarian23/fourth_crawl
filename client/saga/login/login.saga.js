@@ -57,6 +57,7 @@ const loginStatus = function* (data) {
     yield put({ type: LOGIN_STATUS_TEXT, value: loginConstant.loginSuccess });
 }
 
+//watcher
 export const watchLogin = function* () {
     yield takeLatest(LOGIN, login);
 }

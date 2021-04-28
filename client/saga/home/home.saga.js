@@ -1,7 +1,7 @@
 import { takeLatest, take, put, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import { homeConstant } from "../../constants/home/home.constant";
-import { ADD_NUMBER } from "../../action/home/home.action";
+import { ADD_PHONE } from "../../action/home/home.action";
 import socketClient from "../../service/socket/socket.client.service";
 import { SOCKET_WORKING_SINGLE_NUMBER, MAIN_URL } from "../../../common/constants/common.constants";
 
@@ -42,5 +42,5 @@ const addNumber = function* (action) {
 
 
 export const watchHome = function* () {
-   yield takeLatest(ADD_NUMBER, addNumber);
+   yield takeLatest(ADD_PHONE, addNumber);
 }

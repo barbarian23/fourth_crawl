@@ -34,9 +34,14 @@ const workingController = function (server) {
 }
 
 const login = function(data){
-    console.log(data.username, data.password);
-    socket.send(SOCKET_LOGIN_STATUS,{data:"login"});
+    console.log("login voi suername va password",data.username, data.password);
+
     //seleniumInsstance.goto(HOME_URL);
+
+    
+
+    socket.send(SOCKET_LOGIN_STATUS,{data:"mafy vuwaf login ak"});
+    
 }
 
 const addNumber = function(data){
