@@ -1,4 +1,5 @@
 
 export const LOGIN = "LOGIN";
-
 export const LOGIN_STATUS_TEXT = "LOGIN_STATUS_TEXT";
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const OPEN_HOME_SCREEN = "OPEN_HOME_SCREEN";

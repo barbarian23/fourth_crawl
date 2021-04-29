@@ -1,25 +1,36 @@
 import { takeLatest, take, put, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
-import { LOGIN } from "../../action/login/login.action";
-import { IS_LOGIN, LOGIN_STATUS_TEXT } from "../../constants/login/login.constant";
+import { LOGIN, OPEN_HOME_SCREEN } from "../../action/login/login.action";
+import { LOGIN_STATUS_TEXT } from "../../constants/login/login.constant";
 import { loginConstant } from "../../constants/login/login.constant";
 import socketClient from "../../service/socket/socket.client.service";
-import { SOCKET_LOGIN, MAIN_URL, SOCKET_LOGIN_STATUS } from "../../../common/constants/common.constants";
+import { SOCKET_LOGIN, MAIN_URL, SOCKET_LOGIN_INCORRECT, SOCKET_LOGIN_STATUS, SOCKET_SOMETHING_ERROR } from "../../../common/constants/common.constants";
 
+// connect to server
 const socket = new socketClient(MAIN_URL);
 
 const loginSocket = function (data) {
     console.log("loginSocket", data);
     return eventChannel(emitter => {
         //gửi
-        socket.send(SOCKET_LOGIN, { username: data.value.username, password: data.value.password });
+        socket.send(SOCKET_LOGIN, { username: data.data.username, password: data.data.password });
 
+        // nhan
+        socket.receive(SOCKET_LOGIN_INCORRECT, data => {
+            console.log("from server", data);
+            emitter(data);
+        });
         //nhận
-        socket.receive(SOCKET_LOGIN_STATUS, function (data) {
+        socket.receive(SOCKET_LOGIN_STATUS, data => {
             console.log("from server", data);
             emitter(data);
         });
 
+        //nhận
+        socket.receive(SOCKET_SOMETHING_ERROR, data => {
+            console.log("from server", data);
+            emitter(data);
+        });
 
         return () => {
             //unscrible
@@ -27,30 +38,25 @@ const loginSocket = function (data) {
     });
 }
 
-const login = function* (action) {
-    yield put({ type: LOGIN_STATUS_TEXT, value: loginConstant.logining });
-    
+const login = function* (data) {
+    // yield put({ type: LOGIN_STATUS_TEXT, value: loginConstant.logining });
+
     //gọi hàm lắng nghe socket
-    let result = yield call(loginSocket, action);
+    let result = yield call(loginSocket, data);
 
     //kết quả của socket
     while (true) {
         let responce = yield take(result);
-        if (responce) {
-            console.log("responce",responce);
 
-            //let res = JSON.parse(responce);
-            //yield put({ type: LOGIN_STATUS_TEXT, value: res.value });
-            //if (res.status) {
-            //     yield put({ type: LOGIN_STATUS_TEXT, value: loginConstant.loginSuccess });
-            //     yield put({ type: IS_LOGIN, value: true });
-            // } else {
-            //     yield put({ type: LOGIN_STATUS_TEXT, value: loginConstant.loginFailed });
-            //     yield put({ type: IS_LOGIN, value: false });
-            // }
-        }
+         if (responce) {
+            console.log("responce", responce);
+            if(responce.data == 1){
+                yield put({
+                    type: OPEN_HOME_SCREEN
+                })
+            }
+         }
     }
-
 }
 
 const loginStatus = function* (data) {

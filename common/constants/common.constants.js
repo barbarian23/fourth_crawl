@@ -11,7 +11,8 @@ export const SOCKET_EDIT_PHONE = "edit-phone";
 export const SOCKET_DELETE_PHONE = "delete-phone";
 export const SOCKET_CHANGE_MONEY = "change-money";
 export const SOCKET_LOG = "log";
-
+export const SOCKET_LOGIN_INCORRECT = "SOCKET_LOGIN_INCORRECT";
+export const SOCKET_SOMETHING_ERROR = "SOCKET_SOMETHING_ERROR";
 //chung
 export const PORT = 3000;
 export const MAIN_URL = "http://localhost:" + PORT;

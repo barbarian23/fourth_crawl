@@ -25,12 +25,13 @@ export default function login(props) {
 
     }
 
-    let isLogin = useSelector(state => state.login.isLogin); // state islogin của reducer login, không phải reducer home
-    let loginStatusText = useSelector(state => state.login.loginStatusText);
-    let isLoginSuccess = useSelector(state => state.login.isLoginSuccess);
-
     let history = useHistory();
+    let { isLogin, isLoginSuccess } = useSelector(state => state.login);
+
     useEffect(() => {
+        // dieu huong sang home
+
+        console.log("is success", isLoginSuccess);
         if (isLoginSuccess) {
             history.push("/home");
         }
@@ -61,7 +62,7 @@ export default function login(props) {
                         </div>
 
                         <div className="crawl-login-button-submit" id="crawl_login_button_submit"
-                            onClick={() => dispatchToStore({ type: LOGIN, value: { username: username, password: password } })}>
+                            onClick={() => dispatchToStore({ type: LOGIN, data: { username: username, password: password } })}>
                             <span>{loginConstant.loginButton}</span>
                         </div>
                     </div> :

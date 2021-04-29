@@ -6,6 +6,7 @@ import {
     SOCKET_WORKING_SINGLE_NUMBER,
     SOCKET_WORKING_ADDED_NUMBER
 } from "../../../common/constants/common.constants";
+import doLogin from "../work/login.controller";
 import { HOME_URL } from "../../constants/work/work.constants";
 
 var socket = null;
@@ -34,13 +35,11 @@ const workingController = function (server) {
 }
 
 const login = function(data){
-    console.log("login voi suername va password",data.username, data.password);
-
-    //seleniumInsstance.goto(HOME_URL);
-
+    console.log("login voi username va password",data.username, data.password);
+   
+    doLogin(data.username, data.password, socket);
     
-
-    socket.send(SOCKET_LOGIN_STATUS,{data:"mafy vuwaf login ak"});
+    // socket.send(SOCKET_LOGIN_STATUS,{data:"mafy vuwaf login ak"});
     
 }
 
