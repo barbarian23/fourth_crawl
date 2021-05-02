@@ -11,6 +11,10 @@ td{
     background: #f3e5f5;
 }
 
+.btn{
+    cursor: pointer;
+}
+
 .edit{
     border-radius: 10;
     background: #42a5f5;

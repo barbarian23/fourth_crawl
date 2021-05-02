@@ -1,18 +1,23 @@
 import seleniumCrawl from "../../service/crawler/selenium.server.service";
 import socketServer from "../../service/socket/socket.server.service";
+import csvService from "../../service/csv/csv.server.service";
 import { 
     SOCKET_LOGIN, 
     SOCKET_LOGIN_STATUS, 
+    SOCKET_GET_LIST_PHONE,
     SOCKET_WORKING_SINGLE_NUMBER,
-    SOCKET_WORKING_ADDED_NUMBER
+    SOCKET_WORKING_SOME_NUMBER,
+    SOCKET_WORKING_ADDED_NUMBER,
+    SOCKET_WORKING_ADDED_SOME_NUMBER,
 } from "../../../common/constants/common.constants";
 import doLogin from "../work/login.controller";
 import { HOME_URL } from "../../constants/work/work.constants";
 
 var socket = null;
 const seleniumInsstance = new seleniumCrawl();
+const csvInstance = new csvService();
 
-let obJectNumber = [
+let arrayNumber = [
     // {
     //     number:"090090090",
     //     money:10000,
@@ -21,6 +26,7 @@ let obJectNumber = [
     // }
 ];
 
+arrayNumber = csvInstance.readFile();
 
 const workingController = function (server) {
     socket = socketServer(server);
@@ -30,7 +36,15 @@ const workingController = function (server) {
         // });
         receive.on(SOCKET_LOGIN, login);
 
+        //get list phone
+        receive.on(SOCKET_GET_LIST_PHONE, getListPhone);
+        
+        // add number
         receive.on(SOCKET_WORKING_SINGLE_NUMBER, addNumber);
+
+        // thêm sdt, số tiền qua file excel
+        receive.on(SOCKET_WORKING_SOME_NUMBER, addSomeNumber);
+        
     });
 }
 
@@ -43,11 +57,26 @@ const login = function(data){
     
 }
 
+const getListPhone = function(){
+    // arrayNumber = csvInstance.readFile();
+    return arrayNumber;
+}
+
 const addNumber = function(data){
-    console.log("theem soos",data.value);
+    console.log("theem soos", data);
     //kiểm tra có bị trùng
-    obJectNumber.push();
-    socket.send(SOCKET_WORKING_ADDED_NUMBER,data.value);
+    arrayNumber.push(data);
+    socket.send(SOCKET_WORKING_ADDED_NUMBER, data);
+    
+    csvInstance.writeFile(arrayNumber);
+    //seleniumInsstance.goto(HOME_URL);
+}
+
+const addSomeNumber = function(data){
+    console.log("theem nhieu soos", data);
+    //kiểm tra có bị trùng
+    arrayNumber.push(data);
+    socket.send(SOCKET_WORKING_ADDED_SOME_NUMBER, data);
     //seleniumInsstance.goto(HOME_URL);
 }
 

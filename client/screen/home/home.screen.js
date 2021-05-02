@@ -1,20 +1,27 @@
 import React, { useState, useEffect } from "react";
 import '../../assets/css/home/home.css';
 import { TH_STT, TH_PHONE, TH_MONEY, TH_INFO, TH_TRACK, TR_TYPE_NUMBER, TR_TYPE_MONEY, TR_TYPE_ADD, sampleData } from "../../constants/home/home.constant";
-import { ADD_PHONE } from "../../action/home/home.action";
+import { ADD_PHONE, GET_LIST_PHONE } from "../../action/home/home.action";
 import { readFileExcel, createFileExcel } from "../../service/excel/excel.client.service";
 import { useSelector, useDispatch } from 'react-redux';
 
+import Row from './row.home.screen';
+
 export default function Home() {
-    let { phone, setPhone } = useState("");
-    let { money, setMoney } = useState("");
+    const [phone, setPhone ] = useState("");
+    const [ money, setMoney ] = useState(0);
+
+    const dispatch = useDispatch();
+
+    dispatch({ type: GET_LIST_PHONE, data: {} });
 
     let listPhone = useSelector(state => state.home.listPhone);
 
     useEffect(() => {
-        console.log("current list phone");
+        console.log("current list phone", listPhone);
     }, [listPhone]);
 
+    
     let readFile = (e) => {
         readFileExcel(e.target.files[0], (data) => {
             //data là mảng chứa danh sách thuê bao và số tiền
@@ -43,7 +50,8 @@ export default function Home() {
     }
 
     let addNew = () => {
-        useDispatch({ type: ADD_PHONE, value: { phone: phone, money: money } });
+        // console.log({ phone: phone, money: money })
+        dispatch({ type: ADD_PHONE, data: { phone: phone, money: money } });
     }
 
     return (
@@ -60,15 +68,14 @@ export default function Home() {
                         </tr>
                         {
                             listPhone 
-                            ?
-                            listPhone.forEach((item, index) => {
-                                <row
+                            ? listPhone.map((item, index) => {
+                                console.log(index, item);
+                                return <Row key={index}
                                     data={item}
-                                    key={index}
+                                    index={index}
                                 />
                             })
-                            :
-                            null
+                            : null
                         }
                     </tbody>
                 </table>
@@ -83,7 +90,7 @@ export default function Home() {
 
                 <div id="crawl_login_file_input_up">
                     <img id="img_file_input" src='../assets/images/file.png' />
-                    <label for="xlsx">Bấm vào đây để chọn tệp(excel):</label>
+                    <label htmlFor="xlsx">Bấm vào đây để chọn tệp(excel):</label>
                     <input type="file"
                         id="xlsx" name="xlsx"
                         accept="xlsx" onChange={readFile} />
@@ -92,7 +99,7 @@ export default function Home() {
 
                 <div id="crawl_login_file_input_down" onClick={downloadFile} >
                     <img id="img_file_input" src='../assets/images/file.png' />
-                    <label for="avatar">Bấm vào đây để tải tệp(excel) mẫu</label>
+                    <label htmlFor="avatar">Bấm vào đây để tải tệp(excel) mẫu</label>
                 </div>
 
                 <div className="crawl-loading-parent" id="div_login_loading">

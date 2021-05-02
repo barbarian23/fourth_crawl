@@ -29,5 +29,5 @@ export default function loginReducer(state = initialState, action) {
             ...state
         }
     }
-    return Object.assign({}, state, { [action.type]: action.value });
+    // return Object.assign({}, state, { [action.type]: action.value });
 }

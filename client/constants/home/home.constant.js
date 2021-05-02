@@ -4,8 +4,8 @@ export const homeConstant = {
 
 export const TH_STT = "Số thứ tự";
 export const TH_PHONE = "Số điện thoại";
-export const TH_MONEY = "Số tiền";
-export const TH_INFO = "Thông tin nạp thẻ";
+export const TH_MONEY = "Số tiền cảnh báo";
+export const TH_INFO = "Tài chính khoản";
 export const TH_TRACK = "Theo dõi";
 
 export const TH_EDIT = "Sửa";
