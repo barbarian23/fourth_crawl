@@ -5,10 +5,13 @@ import {
     SOCKET_LOGIN, 
     SOCKET_LOGIN_STATUS, 
     SOCKET_GET_LIST_PHONE,
+    SOCKET_LIST_PHONE,
     SOCKET_WORKING_SINGLE_NUMBER,
     SOCKET_WORKING_SOME_NUMBER,
     SOCKET_WORKING_ADDED_NUMBER,
     SOCKET_WORKING_ADDED_SOME_NUMBER,
+    SOCKET_WORKING_DELETE_PHONE,
+    SOCKET_WORKING_DELETED_PHONE,
 } from "../../../common/constants/common.constants";
 import doLogin from "../work/login.controller";
 import { HOME_URL } from "../../constants/work/work.constants";
@@ -44,6 +47,9 @@ const workingController = function (server) {
 
         // thêm sdt, số tiền qua file excel
         receive.on(SOCKET_WORKING_SOME_NUMBER, addSomeNumber);
+
+        // delete sdt
+        receive.on(SOCKET_WORKING_DELETE_PHONE, deletePhone);
         
     });
 }
@@ -57,9 +63,11 @@ const login = function(data){
     
 }
 
-const getListPhone = function(){
+const getListPhone = function(data){
+    console.log("getListPhone", data);
+
     // arrayNumber = csvInstance.readFile();
-    return arrayNumber;
+    socket.send(SOCKET_LIST_PHONE, arrayNumber);
 }
 
 const addNumber = function(data){
@@ -78,6 +86,11 @@ const addSomeNumber = function(data){
     arrayNumber.push(data);
     socket.send(SOCKET_WORKING_ADDED_SOME_NUMBER, data);
     //seleniumInsstance.goto(HOME_URL);
+}
+
+const deletePhone = function(data){
+    console.log("delete with phone and money", data);
+    socket.send(SOCKET_WORKING_DELETED_PHONE, data);
 }
 
 export default workingController;

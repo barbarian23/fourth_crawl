@@ -14,8 +14,8 @@ const mapKey = new Map([
 ]);
 
 export default function loginReducer(state = initialState, action) {
-    console.log("initialState " + JSON.stringify(state));
-    console.log("[loginReducers " + action.type + "]", action.value);
+    // console.log("initialState " + JSON.stringify(state));
+    // console.log("[loginReducers " + action.type + "]", action.value);
 
     switch(action.type){
         

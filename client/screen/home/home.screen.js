@@ -13,12 +13,15 @@ export default function Home() {
 
     const dispatch = useDispatch();
 
-    dispatch({ type: GET_LIST_PHONE, data: {} });
+    
 
     let listPhone = useSelector(state => state.home.listPhone);
 
     useEffect(() => {
         console.log("current list phone", listPhone);
+        if(listPhone.length === 0){
+            dispatch({ type: GET_LIST_PHONE, data: null });
+        }
     }, [listPhone]);
 
     

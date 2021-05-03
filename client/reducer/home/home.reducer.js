@@ -3,11 +3,19 @@
 import {
     GET_LIST_PHONE_SUCCESS,
     GET_LIST_PHONE_FAIL,
-    ADD_PHONE_SUCCESS}from '../../action/home/home.action';
+    ADD_PHONE_SUCCESS,
+    EDIT_PHONE,
+    DELETE_PHONE}from '../../action/home/home.action';
 
 const initialState = {
     something: undefined,
     listPhone:[],
+    phoneNumber:{
+        index:"",
+        phone:"",
+        money:"",
+        info:""
+    }
 };
 
 const mapKey = new Map([
@@ -16,7 +24,7 @@ const mapKey = new Map([
 ]);
 
 export default function homeReducer(state = initialState, action) {
-    console.log("[homeReducers " + action.type + "]", action.value);
+    // console.log("[homeReducers " + action.type + "]", action.value);
 
     switch(action.type){
         case GET_LIST_PHONE_SUCCESS:
@@ -24,13 +32,11 @@ export default function homeReducer(state = initialState, action) {
                 ...state,
                 listPhone: action.value,
             }
-        
         case GET_LIST_PHONE_FAIL:
             return{
                 ...state,
                 listPhone: [],
             }
-
         case ADD_PHONE_SUCCESS:
             return{
                 ...state,
@@ -42,7 +48,16 @@ export default function homeReducer(state = initialState, action) {
                     }
                 ]
             }
-
+        case EDIT_PHONE:
+            return{
+                ...state,
+            }
+        case DELETE_PHONE:
+            console.log(" reducer delete phone ", action.data)
+            return{
+                ...state,
+                phoneNumber: action.data,
+            }
         default:
             return{
                 ...state

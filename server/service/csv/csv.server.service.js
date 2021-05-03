@@ -30,9 +30,9 @@ function csvService() {
         const csvWriter = createCsvWriter({
           path: csvFilePath,
           header: [
-            {id: 'phone', title: 'Phone number'},
-            {id: 'money', title: 'Money'},
-            {id: 'info', title: 'Info'},
+            {id: 'phone', title: 'phone'},
+            {id: 'money', title: 'money'},
+            {id: 'info', title: 'info'},
           ]
         });
 

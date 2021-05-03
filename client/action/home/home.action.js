@@ -7,7 +7,12 @@ export const ADD_PHONE_SUCCESS = "add-phone-success";
 export const ADD_PHONE_FAIL = "add-phone-fail";
 
 export const EDIT_PHONE= "edit-phone";
+export const EDIT_PHONE_SUCCESS = "edit-phone-success";
+export const EDIT_PHONE_FAIL= "edit-phone-fail";
+
 export const DELETE_PHONE = "delete-phone";
+export const DELETE_PHONE_SUCCESS = "delete-phone-success";
+export const DELETE_PHONE_FAIL = "delete-phone-fail";
 
 export const CHANGE_MONEY = "change-money";
 
