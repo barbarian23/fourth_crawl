@@ -90,7 +90,10 @@ const addSomeNumber = function(data){
 
 const deletePhone = function(data){
     console.log("delete with phone and money", data);
-    socket.send(SOCKET_WORKING_DELETED_PHONE, data);
+    console.log("list number from server", arrayNumber);
+    arrayNumber.splice((data.index)-1,1);
+    // console.log("list number after delete", arrayNumber);
+    socket.send(SOCKET_WORKING_DELETED_PHONE, arrayNumber);
 }
 
 export default workingController;
