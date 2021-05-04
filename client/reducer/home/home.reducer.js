@@ -5,7 +5,9 @@ import {
     GET_LIST_PHONE_FAIL,
     ADD_PHONE_SUCCESS,
     EDIT_PHONE,
-    DELETE_PHONE}from '../../action/home/home.action';
+    DELETE_PHONE,
+    DELETE_PHONE_SUCCESS,
+    EDIT_PHONE_SUCCESS}from '../../action/home/home.action';
 
 const initialState = {
     something: undefined,
@@ -48,15 +50,29 @@ export default function homeReducer(state = initialState, action) {
                     }
                 ]
             }
-        case EDIT_PHONE:
-            return{
-                ...state,
-            }
         case DELETE_PHONE:
-            console.log(" reducer delete phone ", action.data)
+            console.log(" reducer delete phone ", action.data);
             return{
                 ...state,
                 phoneNumber: action.data,
+            }
+        case DELETE_PHONE_SUCCESS:
+            console.log(" reducer after delete phone ", action.data)
+            return{
+                ...state,
+                listPhone: action.data,
+            }
+        case EDIT_PHONE:
+            console.log(" reducer edit phone ", action.data);
+            return{
+                ...state,
+                phoneNumber: action.data,
+            }
+        case EDIT_PHONE_SUCCESS:
+            console.log(" reducer after edit phone ", action.data)
+            return{
+                ...state,
+                listPhone: action.data,
             }
         default:
             return{

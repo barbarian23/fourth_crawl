@@ -22,20 +22,27 @@ export default function Row(props) {
     let [newPhone, setNewPhone] = useState(false);
     let [newMoney, setNewMoney] = useState(false);
 
-    // let editPhone = () => {
-    //     isEdited ? setEdited(false) : setEdited(true);
-    // }
+    let editPhone = () => {
+        isEdited ? setEdited(false) : setEdited(true);
+    }
 
     let update = () => {
         props.update(newPhone, newMoney);
     }
 
     let onChangePhone = (e) => {
-        setNewPhone(e.target.value);
+        if(e)
+            setNewPhone(e.target.value);
+        else
+            setNewPhone(phone);
     }
 
     let onChangeMoney = (e) => {
-        setNewMoney(e.target.value);
+        console.log("row screen - e = ", e);
+        if(e)
+            setNewMoney(e.target.value);
+        else
+            setNewMoney(money);
     }
 
     if (!isEdited){
@@ -46,7 +53,7 @@ export default function Row(props) {
                 <td>{money}</td>
                 <td>{info}</td>
                 <td>
-                    <div className="btn edit" onClick={()=>dispatchToStore({type: EDIT_PHONE, data:{index: index, phone: phone, money: money, info: info}})}>{TH_EDIT}</div>
+                    <div className="btn edit" onClick={editPhone}>{TH_EDIT}</div>
                     <div className="btn delete" onClick={()=>dispatchToStore({type: DELETE_PHONE, data:{index: index, phone: phone, money: money, info: info}})}>{TH_DELETE}</div>
                 </td>
             </tr>
@@ -58,7 +65,14 @@ export default function Row(props) {
                 <td><input type="text" placeholder="Nhập số điện thoại" onChange={onChangePhone} defaultValue={phone}/></td>
                 <td><input type="text" placeholder="Nhập số tiền" onChange={onChangeMoney} defaultValue={money}/></td>
                 <td><input type="text" placeholder="Nhập thông tin nạp thẻ" onClick={update} defaultValue={info}/></td>
-                <td><div className="done">{TH_DONE}</div></td>
+                <td>
+                    <div className="done" 
+                         onClick={()=>{
+                            editPhone();
+                            dispatchToStore({
+                                type: EDIT_PHONE, 
+                                data:{index: index, phone: newPhone, money: newMoney, info: info}});
+                }}>{TH_DONE}</div></td>
             </tr>
         )
 

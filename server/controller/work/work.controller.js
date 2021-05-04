@@ -12,6 +12,8 @@ import {
     SOCKET_WORKING_ADDED_SOME_NUMBER,
     SOCKET_WORKING_DELETE_PHONE,
     SOCKET_WORKING_DELETED_PHONE,
+    SOCKET_WORKING_EDITED_PHONE,
+    SOCKET_WORKING_EDIT_PHONE,
 } from "../../../common/constants/common.constants";
 import doLogin from "../work/login.controller";
 import { HOME_URL } from "../../constants/work/work.constants";
@@ -51,6 +53,8 @@ const workingController = function (server) {
         // delete sdt
         receive.on(SOCKET_WORKING_DELETE_PHONE, deletePhone);
         
+        // edit sdt
+        receive.on(SOCKET_WORKING_EDIT_PHONE, editPhone);
     });
 }
 
@@ -91,9 +95,17 @@ const addSomeNumber = function(data){
 const deletePhone = function(data){
     console.log("delete with phone and money", data);
     console.log("list number from server", arrayNumber);
-    arrayNumber.splice((data.index)-1,1);
+    arrayNumber.splice(data.index,1);
+    csvInstance.writeFile(arrayNumber);
     // console.log("list number after delete", arrayNumber);
     socket.send(SOCKET_WORKING_DELETED_PHONE, arrayNumber);
+}
+
+const editPhone = function(data){
+    arrayNumber[data.index].phone = data.phone;
+    arrayNumber[data.index].money = data.money;
+    csvInstance.writeFile(arrayNumber);
+    socket.send(SOCKET_WORKING_EDITED_PHONE, arrayNumber);
 }
 
 export default workingController;

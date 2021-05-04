@@ -7,8 +7,6 @@ export const CLIENT = "/client";
 export const SOCKET_LOGIN = "login";
 export const SOCKET_LOGIN_STATUS = "login-status";
 export const SOCKET_ADD_PHONE = "add-phone";
-export const SOCKET_EDIT_PHONE = "edit-phone";
-export const SOCKET_DELETE_PHONE = "delete-phone";
 export const SOCKET_CHANGE_MONEY = "change-money";
 export const SOCKET_LOG = "log";
 export const SOCKET_LOGIN_INCORRECT = "SOCKET_LOGIN_INCORRECT";
@@ -23,6 +21,9 @@ export const SOCKET_WORKING_ADDED_SOME_NUMBER = "SOCKET_WORKING_ADDED_SOME_NUMBE
 
 export const SOCKET_WORKING_DELETE_PHONE = "SOCKET_WORKING_DELETE_PHONE";
 export const SOCKET_WORKING_DELETED_PHONE = "SOCKET_WORKING_DELETED_PHONE";
+
+export const SOCKET_WORKING_EDIT_PHONE = "SOCKET_WORKING_EDIT_PHONE";
+export const SOCKET_WORKING_EDITED_PHONE = "SOCKET_WORKING_EDITED_PHONE"; 
 //chung
 export const PORT = 3000;
 export const MAIN_URL = "http://localhost:" + PORT;
