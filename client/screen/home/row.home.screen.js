@@ -17,6 +17,8 @@ export default function Row(props) {
 
     //khi bấm edit
     let [isEdited, setEdited] = useState(false);
+    let [isChangePhone, setChangePhone] = useState(false);
+    let [isChangeMoney, setChangeMoney] = useState(false);
 
     //số điện thoại
     let [newPhone, setNewPhone] = useState(false);
@@ -26,20 +28,29 @@ export default function Row(props) {
         isEdited ? setEdited(false) : setEdited(true);
     }
 
+    let isOnChangePhone = () => {
+        isChangePhone ? setChangePhone(false) : setChangePhone(true);
+    }
+
+    let isOnChangeMoney = () => {
+        isChangeMoney ? setChangeMoney(false) : setChangeMoney(true);
+    }
+
     let update = () => {
         props.update(newPhone, newMoney);
     }
 
     let onChangePhone = (e) => {
-        if(e)
+        console.log("row phone screen - e = ", e.target.value);
+        if(e.target.value != null || e.target.value != undefined )
             setNewPhone(e.target.value);
         else
             setNewPhone(phone);
     }
 
     let onChangeMoney = (e) => {
-        console.log("row screen - e = ", e);
-        if(e)
+        console.log("row money screen - e = ", e.target.value);
+        if(e.target.value != null || e.target.value != undefined)
             setNewMoney(e.target.value);
         else
             setNewMoney(money);
