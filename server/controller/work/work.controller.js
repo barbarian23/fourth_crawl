@@ -14,6 +14,8 @@ import {
     SOCKET_WORKING_DELETED_PHONE,
     SOCKET_WORKING_EDITED_PHONE,
     SOCKET_WORKING_EDIT_PHONE,
+    SOCKET_SETINTERVAL_PHONE,
+    SOCKET_SETINTERVALED_PHONE,
 } from "../../../common/constants/common.constants";
 import doLogin from "../work/login.controller";
 import { HOME_URL } from "../../constants/work/work.constants";
@@ -55,6 +57,9 @@ const workingController = function (server) {
         
         // edit sdt
         receive.on(SOCKET_WORKING_EDIT_PHONE, editPhone);
+
+        // setinterval
+        receive.on(SOCKET_SETINTERVAL_PHONE, setIntervalPhone);
     });
 }
 
@@ -108,4 +113,18 @@ const editPhone = function(data){
     socket.send(SOCKET_WORKING_EDITED_PHONE, arrayNumber);
 }
 
+let random = () => {
+    let rd = Math.floor(Math.random() * 10);
+    console.log("number random", rd);
+    return rd;
+}
+
+const setIntervalPhone = function(data){
+    arrayNumber.forEach((item, index) => {
+        item[index].info = setInterval(()=>{
+            random();
+        },2000);
+    });
+    socket.send(SOCKET_SETINTERVALED_PHONE, arrayNumber);
+}
 export default workingController;

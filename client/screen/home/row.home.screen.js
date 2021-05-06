@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { DELETE_PHONE, EDIT_PHONE } from "../../action/home/home.action";
+import { DELETE_PHONE, EDIT_PHONE, SET_INTERVAL_PHONE } from "../../action/home/home.action";
 import '../../assets/css/home/row.css';
 import { TH_EDIT, TH_DELETE, TH_DONE } from "../../constants/home/home.constant";
 
@@ -17,31 +17,17 @@ export default function Row(props) {
 
     //khi bấm edit
     let [isEdited, setEdited] = useState(false);
-    let [isChangePhone, setChangePhone] = useState(false);
-    let [isChangeMoney, setChangeMoney] = useState(false);
 
     //số điện thoại
-    let [newPhone, setNewPhone] = useState(false);
-    let [newMoney, setNewMoney] = useState(false);
+    let [newPhone, setNewPhone] = useState(phone);
+    let [newMoney, setNewMoney] = useState(money);
 
     let editPhone = () => {
         isEdited ? setEdited(false) : setEdited(true);
     }
 
-    let isOnChangePhone = () => {
-        isChangePhone ? setChangePhone(false) : setChangePhone(true);
-    }
-
-    let isOnChangeMoney = () => {
-        isChangeMoney ? setChangeMoney(false) : setChangeMoney(true);
-    }
-
-    let update = () => {
-        props.update(newPhone, newMoney);
-    }
-
     let onChangePhone = (e) => {
-        console.log("row phone screen - e = ", e.target.value);
+        console.log("row phone screen - e = ", e.target.value, "old data");
         if(e.target.value != null || e.target.value != undefined )
             setNewPhone(e.target.value);
         else
@@ -56,6 +42,12 @@ export default function Row(props) {
             setNewMoney(money);
     }
 
+    useEffect(()=>{
+        dispatch({
+            type: SET_INTERVAL_PHONE,
+            data: data,
+        })
+    },[]);
     if (!isEdited){
         return (
             <tr key={index}>
@@ -75,7 +67,7 @@ export default function Row(props) {
                 <td>{index + 1}</td>
                 <td><input type="text" placeholder="Nhập số điện thoại" onChange={onChangePhone} defaultValue={phone}/></td>
                 <td><input type="text" placeholder="Nhập số tiền" onChange={onChangeMoney} defaultValue={money}/></td>
-                <td><input type="text" placeholder="Nhập thông tin nạp thẻ" onClick={update} defaultValue={info}/></td>
+                <td>{info}</td>
                 <td>
                     <div className="done" 
                          onClick={()=>{

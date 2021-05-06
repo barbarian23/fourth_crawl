@@ -10,6 +10,8 @@ import {
     DELETE_PHONE_SUCCESS,
     EDIT_PHONE,
     EDIT_PHONE_SUCCESS,
+    SET_INTERVAL_PHONE,
+    SET_INTERVAL_PHONE_SUCCESS,
 } from "../../action/home/home.action";
 import socketClient from "../../service/socket/socket.client.service";
 import { 
@@ -22,6 +24,8 @@ import {
     SOCKET_WORKING_DELETED_PHONE, 
     SOCKET_WORKING_EDIT_PHONE,
     SOCKET_WORKING_EDITED_PHONE,
+    SOCKET_SETINTERVAL_PHONE,
+    SOCKET_SETINTERVALED_PHONE,
 } from "../../../common/constants/common.constants";
 
 const socket = new socketClient(MAIN_URL);
@@ -166,11 +170,46 @@ const editPhone = function* (action){
            })
        }
    }
+}
+
+///////////////////////////////////////
+// 
+const setIntervalPhoneSocket = function(data){
+    console.log("setinterval listphone socket", data.data);
+   return eventChannel(emitter => {
+       socket.send(SOCKET_SETINTERVAL_PHONE,{listPhone: data.data});
+       socket.receive(SOCKET_SETINTERVALED_PHONE, function(data){
+           // console.log("delete home.saga from server", data);
+           emitter(data || '');
+       });
+       return () => {
+           // unscrible
+       };
+   });
+}
+// Nhận kết quả từ socket
+const setIntervalPhone = function* (action){
+   //lay vee fkeest quar cuar event channel redux
+   let result = yield call(setIntervalPhoneSocket, action);
+
+   // ket qua cua socket
+   while(true){
+       let responce = yield take(result);
+       if(responce){
+           console.log("respone", responce);
+           yield put({
+               type: SET_INTERVAL_PHONE_SUCCESS,
+               data: responce
+           })
+       }
+   }
 
 }
+
 export const watchHome = function* () {
    yield takeLatest(ADD_PHONE, addNumberSaga);
    yield takeLatest(GET_LIST_PHONE, getListPhoneSaga);
    yield takeLatest(DELETE_PHONE,deletePhone);
    yield takeLatest(EDIT_PHONE, editPhone);
+   yield takeLatest(SET_INTERVAL_PHONE, setIntervalPhone);
 }

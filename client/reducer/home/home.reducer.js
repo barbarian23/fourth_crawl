@@ -7,7 +7,9 @@ import {
     EDIT_PHONE,
     DELETE_PHONE,
     DELETE_PHONE_SUCCESS,
-    EDIT_PHONE_SUCCESS}from '../../action/home/home.action';
+    EDIT_PHONE_SUCCESS,
+    SET_INTERVAL_PHONE,
+    SET_INTERVAL_PHONE_SUCCESS} from '../../action/home/home.action';
 
 const initialState = {
     something: undefined,
@@ -69,7 +71,19 @@ export default function homeReducer(state = initialState, action) {
                 phoneNumber: action.data,
             }
         case EDIT_PHONE_SUCCESS:
-            console.log(" reducer after edit phone ", action.data)
+            console.log(" reducer after edit phone ", action.data);
+            return{
+                ...state,
+                listPhone: action.data,
+            }
+        case SET_INTERVAL_PHONE:
+            console.log("reducer set interval listphone", action.data);
+            return{
+                ...state,
+                listPhone: action.data,
+            }
+        case SET_INTERVAL_PHONE_SUCCESS:
+            console.log("reducer set interval phone", action.data);
             return{
                 ...state,
                 listPhone: action.data,

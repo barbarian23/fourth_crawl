@@ -14,6 +14,9 @@ export const DELETE_PHONE = "delete-phone";
 export const DELETE_PHONE_SUCCESS = "delete-phone-success";
 export const DELETE_PHONE_FAIL = "delete-phone-fail";
 
+export const SET_INTERVAL_PHONE = "SET_INTERVAL_PHONE";
+export const SET_INTERVAL_PHONE_SUCCESS = "SET_INTERVAL_PHONE_SUCCESS";
+
 export const CHANGE_MONEY = "change-money";
 
 
