@@ -6,14 +6,14 @@ import { readFileExcel, createFileExcel } from "../../service/excel/excel.client
 import { useSelector, useDispatch } from 'react-redux';
 
 import Row from './row.home.screen';
+import { validatePhonenumber } from "../../service/util/utils.client";
 
 export default function Home() {
     const [phone, setPhone ] = useState("");
     const [ money, setMoney ] = useState(0);
+    const [warningPhone, setWarningPhone] = useState("");
 
     const dispatch = useDispatch();
-
-    
 
     let listPhone = useSelector(state => state.home.listPhone);
 
@@ -47,6 +47,10 @@ export default function Home() {
 
     let onInputPhone = (e) => {
         setPhone(e.target.value);
+        if(!validatePhonenumber(phone))
+            setWarningPhone("Số điện thoại không hợp lệ");
+        else
+            setWarningPhone("");
     }
 
     let onInputMoney = (e) => {
@@ -84,13 +88,19 @@ export default function Home() {
                 </table>
 
                 <div className="divTextStatus"></div>
-
+                
                 <div className="input-add-div">
-                    <input className="input-add" type="text" placeholder={TR_TYPE_NUMBER} onChange={onInputPhone} />
+                    <input className="input-add" 
+                        type="text" 
+                        placeholder={TR_TYPE_NUMBER} 
+                        onChange={onInputPhone}
+                        />
                     <input className="input-add" type="text" placeholder={TR_TYPE_MONEY} onChange={onInputMoney} />
                     <input className="input-add-button" type="button" value={TR_TYPE_ADD} onClick={addNew} />
+                    <div>{warningPhone}</div>
                 </div>
-
+                <div>
+                </div>    
                 <div id="crawl_login_file_input_up">
                     <img id="img_file_input" src='../assets/images/file.png' />
                     <label htmlFor="xlsx">Bấm vào đây để chọn tệp(excel):</label>
