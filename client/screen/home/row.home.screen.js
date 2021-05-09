@@ -44,11 +44,11 @@ export default function Row(props) {
 
     if (!isEdited){
         return (
-            <tr key={index}>
+            <tr style={{backgroundColor: (data.info > 5)?"#00FF00":"#FFFFFF"}} key={index}>
                 <td>{index + 1}</td>
                 <td>{phone}</td>
                 <td>{money}</td>   
-                <td style={{backgroundColor: (data.info > 5)?"#00FF00":"#FFFFFF"}}>{info}</td>             
+                <td>{info}</td>             
                 <td>
                     <div className="btn edit" onClick={editPhone}>{TH_EDIT}</div>
                     <div className="btn delete" onClick={()=>dispatchToStore({type: DELETE_PHONE, data:{index: index, phone: phone, money: money, info: info}})}>{TH_DELETE}</div>
