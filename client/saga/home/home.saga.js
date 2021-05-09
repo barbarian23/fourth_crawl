@@ -27,6 +27,7 @@ import {
     SOCKET_WORKING_EDITED_PHONE,
     SOCKET_SETINTERVAL_PHONE,
     SOCKET_SETINTERVALED_PHONE,
+    SOCKET_LOG
 } from "../../../common/constants/common.constants";
 
 const socket = new socketClient(MAIN_URL);
@@ -204,7 +205,7 @@ const setIntervalPhone = function* (action){
    while(true){
        let responce = yield take(result);
        if(responce){
-           console.log("respone", responce);
+           //console.log("respone", responce);
            yield put({
                type: SET_INTERVAL_PHONE_SUCCESS,
                data: {
@@ -216,6 +217,12 @@ const setIntervalPhone = function* (action){
    }
 
 }
+
+///////////////////////////////////////
+// 
+socket.receive(SOCKET_LOG, function(data){
+    console.log("server log", data);
+});
 
 export const watchHome = function* () {
    yield takeLatest(ADD_PHONE, addNumberSaga);

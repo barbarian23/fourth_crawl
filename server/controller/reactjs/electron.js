@@ -13,8 +13,10 @@ function createWindow() {
      console.log(isDev);
     mainWindow.loadURL(
         isDev
-            ? "http://localhost:3000/home"
-            : `file://${path.join(__dirname, "../build/index.html")}`
+            ? "http://localhost:3000/login"
+            : `file://${__dirname}/../../../../../../../dist/public/index.html`  
+            //`file://${__dirname}/dist/index.html`
+            //win.loadURL(`file://${path.join(__dirname, '../build/index.html')}`)
     );
     mainWindow.on("closed", () => (mainWindow = null));
 }
