@@ -58,11 +58,6 @@ const workingController = function (server) {
     //khoi tao socket
     socket = socketServer(server);
     socket.receive((receive) => {
-        // receive.on(SOCKET_LOGIN, function (data) {
-        //     login(data.username, data.password);
-        // });
-
-
 
         receive.on(SOCKET_LOGIN, login);
 
@@ -105,32 +100,44 @@ const getListPhone = function(data){
 const findIndex = num => {
     let tempIndex = -1;
     arrayNumber.some((item,index)=>{
-        // 0 1 2 4 5
         if(item.phone == num){
-            tempIndex = index; // 3
+            tempIndex = index; 
             return true;
         }
     });
     return tempIndex;
 }
 
+const duplicateNumber = num => {
+    let bool = false; 
+    bool = arrayNumber.some((item) => {
+        if(item.phone == num)
+            return true;
+    });
+    return bool;
+}
 const addNumber = function(data){
     
     //kiểm tra có bị trùng
-    arrayNumber.push(data); 
-    console.log("theem soos", arrayNumber[arrayNumber.length-1]);
-    let tempIndex = arrayNumber.length - 1; // 3
-    // console.log()
-    socket.send(SOCKET_WORKING_ADDED_NUMBER, data);
-    arrayNumber[tempIndex].interval = setInterval(()=>{ // xoa 3 >> clear interval 3
-        //lúc thêm mới thì cần thận với cái arrayNumber.length này
-        let idx = findIndex(data.phone); 
-        console.log("interval new",idx, arrayNumber[idx].phone);
-        arrayNumber[idx].info = random();
-        socket.send(SOCKET_SETINTERVALED_PHONE, {info: arrayNumber[idx].info, index: idx, phone: data.phone});
-    }, WAIT_TIME);
+    console.log("duplicate ",duplicateNumber(data.phone));
+    if(duplicateNumber(data.phone) == false){
+        arrayNumber.push(data); 
+        console.log("theem soos", arrayNumber[arrayNumber.length-1]);
+        let tempIndex = arrayNumber.length - 1; // 3
+        // console.log()
+        socket.send(SOCKET_WORKING_ADDED_NUMBER, {status: 200, data: data});
+        arrayNumber[tempIndex].interval = setInterval(()=>{ // xoa 3 >> clear interval 3
+            //lúc thêm mới thì cần thận với cái arrayNumber.length này
+            let idx = findIndex(data.phone); 
+            console.log("interval new",idx, arrayNumber[idx].phone);
+            arrayNumber[idx].info = random();
+            socket.send(SOCKET_SETINTERVALED_PHONE, {info: arrayNumber[idx].info, index: idx, phone: data.phone});
+        }, WAIT_TIME);
+        csvInstance.writeFile(arrayNumber);
+    } else{
+        socket.send(SOCKET_WORKING_ADDED_NUMBER, {status: "Số điện thoại đã tồn tại", data: null});
+    }
     
-    csvInstance.writeFile(arrayNumber);
 }
 
 const addSomeNumber = function(data){
@@ -144,10 +151,6 @@ const deletePhone = function(data){
     console.log("delete with phone and money", data);
     console.log("list number from server", arrayNumber);
     clearInterval(arrayNumber[data.index].interval);
-    // clearIntervel 3
-    //0 1 2 3 4 5
-    //delete 3
-    //0 1 2 4 5
     arrayNumber.splice(data.index,1);
     csvInstance.writeFile(arrayNumber);
     socket.send(SOCKET_WORKING_DELETED_PHONE, {index: data.index});
@@ -166,8 +169,6 @@ const setIntervalPhone = function(data){
         item.interval = setInterval(()=>{
             item.info = random();
             let idx = findIndex(item.phone); 
-            //console.log("random", item.info);
-            //console.log("listphone after random", arrayNumber);
             socket.send(SOCKET_SETINTERVALED_PHONE, {info: item.info, index: idx, phone:item.phone});
         },WAIT_TIME);
     });

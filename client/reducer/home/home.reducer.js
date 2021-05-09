@@ -9,7 +9,8 @@ import {
     DELETE_PHONE_SUCCESS,
     EDIT_PHONE_SUCCESS,
     SET_INTERVAL_PHONE,
-    SET_INTERVAL_PHONE_SUCCESS} from '../../action/home/home.action';
+    SET_INTERVAL_PHONE_SUCCESS,
+    ADD_PHONE_FAIL} from '../../action/home/home.action';
 
 const initialState = {
     something: undefined,
@@ -19,7 +20,8 @@ const initialState = {
         phone:"",
         money:"",
         info:""
-    }
+    },
+    warning:"",
 };
 
 const mapKey = new Map([
@@ -50,7 +52,13 @@ export default function homeReducer(state = initialState, action) {
                         ...action.value,
                         info: ''
                     }
-                ]
+                ],
+                warning: "",
+            }
+        case ADD_PHONE_FAIL:
+            return{
+                ...state,
+                warning: action.value,
             }
         case DELETE_PHONE:
             console.log(" reducer delete phone ", action.data);

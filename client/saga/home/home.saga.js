@@ -12,6 +12,7 @@ import {
     EDIT_PHONE_SUCCESS,
     SET_INTERVAL_PHONE,
     SET_INTERVAL_PHONE_SUCCESS,
+    ADD_PHONE_FAIL,
 } from "../../action/home/home.action";
 import socketClient from "../../service/socket/socket.client.service";
 import { 
@@ -58,12 +59,19 @@ const addNumberSaga = function* (action) {
     //kết quả của socket
     while (true) {
         let responce = yield take(result);
-        if (responce) {
-            console.log("responce added", responce);
+        console.log("responce added", responce);
+        if (responce.status == 200) {
+            console.log("responce added", responce.data);
             yield put({
                 type: ADD_PHONE_SUCCESS,
-                value: responce
-            })
+                value: responce.data
+            });
+        } else {
+            console.log("responce add fail ", responce.status);
+            yield put ({
+                type: ADD_PHONE_FAIL,
+                value: responce.status
+            });
         }
     }
 }

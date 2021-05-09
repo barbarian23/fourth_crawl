@@ -16,6 +16,7 @@ export default function Home() {
     const dispatch = useDispatch();
 
     let listPhone = useSelector(state => state.home.listPhone);
+    let warning = useSelector(state => state.home.warning);
 
     useEffect(() => {
         console.log("current list phone", listPhone);
@@ -97,7 +98,12 @@ export default function Home() {
                         />
                     <input className="input-add" type="text" placeholder={TR_TYPE_MONEY} onChange={onInputMoney} />
                     <input className="input-add-button" type="button" value={TR_TYPE_ADD} onClick={addNew} />
-                    <div>{warningPhone}</div>
+                    {
+                        warning == "" ?
+                        <div>{warningPhone}</div>
+                        :
+                        <div>{warning}</div>
+                    }
                 </div>
                 <div>
                 </div>    
