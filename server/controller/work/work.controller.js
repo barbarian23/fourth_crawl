@@ -18,10 +18,27 @@ import {
     SOCKET_SETINTERVALED_PHONE,
 } from "../../../common/constants/common.constants";
 import doLogin from "../work/login.controller";
-import { HOME_URL } from "../../constants/work/work.constants";
+import { HOME_URL,WAIT_TIME } from "../../constants/work/work.constants";
 
+//selenium
+const webdriver = require('selenium-webdriver');
+const chrome = require('selenium-webdriver/chrome');
+require('chromedriver');
+
+const chromeOption = new chrome.Options().addArguments("start-maximized") // open Browser in maximized mode
+    .addArguments("disable-infobars") // disabling infobars
+    .addArguments("--disable-extensions") // disabling extensions
+    .addArguments("--disable-gpu") // applicable to windows os only
+    .addArguments("--disable-dev-shm-usage")// overcome limited resource problems
+    .addArguments("--no-sandbox");
+
+var driver = new webdriver.Builder().forBrowser('chrome')
+.setChromeOptions(chromeOption).withCapabilities(webdriver.Capabilities.chrome()).build();
+
+//socket
 var socket = null;
-const seleniumInsstance = new seleniumCrawl();
+
+// const seleniumInsstance = new seleniumCrawl();
 const csvInstance = new csvService();
 
 let arrayNumber = [
@@ -36,11 +53,17 @@ let arrayNumber = [
 arrayNumber = csvInstance.readFile();
 
 const workingController = function (server) {
+  
+
+    //khoi tao socket
     socket = socketServer(server);
     socket.receive((receive) => {
         // receive.on(SOCKET_LOGIN, function (data) {
         //     login(data.username, data.password);
         // });
+
+
+
         receive.on(SOCKET_LOGIN, login);
 
         //get list phone
@@ -65,13 +88,13 @@ const workingController = function (server) {
 
 let random = () => {
     let rd = Math.floor(Math.random() * 10);
-    console.log("number random", rd);
+    //console.log("number random", rd);
     return rd;
 }
 
 const login = function(data){
     console.log("login voi username va password",data.username, data.password);
-    doLogin(data.username, data.password, socket);
+    doLogin(data.username, data.password, socket, driver, webdriver);
 }
 
 const getListPhone = function(data){
@@ -100,12 +123,12 @@ const addNumber = function(data){
     // console.log()
     socket.send(SOCKET_WORKING_ADDED_NUMBER, data);
     arrayNumber[tempIndex].interval = setInterval(()=>{ // xoa 3 >> clear interval 3
-        console.log("interval new");
         //lúc thêm mới thì cần thận với cái arrayNumber.length này
         let idx = findIndex(data.phone); 
+        console.log("interval new",idx, arrayNumber[idx].phone);
         arrayNumber[idx].info = random();
-        socket.send(SOCKET_SETINTERVALED_PHONE, {info: arrayNumber[idx].info, index: idx});
-    }, 8000);
+        socket.send(SOCKET_SETINTERVALED_PHONE, {info: arrayNumber[idx].info, index: idx, phone: data.phone});
+    }, WAIT_TIME);
     
     csvInstance.writeFile(arrayNumber);
 }
@@ -142,10 +165,11 @@ const setIntervalPhone = function(data){
     arrayNumber.forEach((item, index) => {
         item.interval = setInterval(()=>{
             item.info = random();
-            console.log("random", item.info);
-            console.log("listphone after random", arrayNumber);
-            socket.send(SOCKET_SETINTERVALED_PHONE, {info: item.info, index: index});
-        },8000);
+            let idx = findIndex(item.phone); 
+            //console.log("random", item.info);
+            //console.log("listphone after random", arrayNumber);
+            socket.send(SOCKET_SETINTERVALED_PHONE, {info: item.info, index: idx, phone:item.phone});
+        },WAIT_TIME);
     });
 }
 export default workingController;

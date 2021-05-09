@@ -1,18 +1,7 @@
 import { LOGIN_URL } from "../../constants/work/work.constants";
 import { SOCKET_LOGIN_INCORRECT, SOCKET_LOGIN_STATUS } from "../../../common/constants/common.constants";
 
-const webdriver = require('selenium-webdriver');
-const chrome = require('selenium-webdriver/chrome');
-require('chromedriver');
 
-const chromeOption = new chrome.Options().addArguments("start-maximized") // open Browser in maximized mode
-    .addArguments("disable-infobars") // disabling infobars
-    .addArguments("--disable-extensions") // disabling extensions
-    .addArguments("--disable-gpu") // applicable to windows os only
-    .addArguments("--disable-dev-shm-usage")// overcome limited resource problems
-    .addArguments("--no-sandbox");
-
-var driver;
 const DEFAULT_DELAY = 2000;
 
 /**
@@ -25,10 +14,9 @@ function timer(ms) {
 }
 
 // do login
-async function doLogin(username, password, socket) {
+async function doLogin(username, password, socket, driver, webdriver) {
     try {
-        driver = new webdriver.Builder().forBrowser('chrome')
-            .setChromeOptions(chromeOption).withCapabilities(webdriver.Capabilities.chrome()).build();
+        //driver.build();
 
         // go to login url
         await driver.get(LOGIN_URL);

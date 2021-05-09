@@ -5,3 +5,5 @@ export const LOGIN_WRONG_USERNAME_PASWORD = "Đăng nhập thất bại, sai tê
 export const LOGIN_WRONG_NETWORK= "Đăng nhập thất bại";
 
 export const LOGIN_URL = "https://github.com/login";
+
+export const WAIT_TIME = 12000;

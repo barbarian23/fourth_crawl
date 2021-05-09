@@ -93,7 +93,7 @@ export default function homeReducer(state = initialState, action) {
             // check null cho chac
             // co truong hop server k tra ve/ tra ve k kip data
             console.log("tempPhone is ", tempPhone,);
-            if(action.data){
+            if(action.data && tempPhone[action.data.index]){
                 tempPhone[action.data.index].info = action.data.info;
             }
             return{
