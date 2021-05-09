@@ -63,30 +63,36 @@ const workingController = function (server) {
     });
 }
 
+let random = () => {
+    let rd = Math.floor(Math.random() * 10);
+    console.log("number random", rd);
+    return rd;
+}
+
 const login = function(data){
     console.log("login voi username va password",data.username, data.password);
-   
     doLogin(data.username, data.password, socket);
-    
-    // socket.send(SOCKET_LOGIN_STATUS,{data:"mafy vuwaf login ak"});
-    
 }
 
 const getListPhone = function(data){
     console.log("getListPhone", data);
-
-    // arrayNumber = csvInstance.readFile();
     socket.send(SOCKET_LIST_PHONE, arrayNumber);
 }
 
 const addNumber = function(data){
-    console.log("theem soos", data);
+    
     //kiểm tra có bị trùng
-    arrayNumber.push(data);
+    arrayNumber.push(data); 
+    console.log("theem soos", arrayNumber[arrayNumber.length-1]);
+    // console.log()
     socket.send(SOCKET_WORKING_ADDED_NUMBER, data);
+    arrayNumber[arrayNumber.length-1].interval = setInterval(()=>{
+        console.log("interval new");
+        arrayNumber[arrayNumber.length-1].info = random();
+        socket.send(SOCKET_SETINTERVALED_PHONE, {info: arrayNumber[arrayNumber.length-1].info, index: arrayNumber.length-1});
+    }, 8000);
     
     csvInstance.writeFile(arrayNumber);
-    //seleniumInsstance.goto(HOME_URL);
 }
 
 const addSomeNumber = function(data){
@@ -94,7 +100,6 @@ const addSomeNumber = function(data){
     //kiểm tra có bị trùng
     arrayNumber.push(data);
     socket.send(SOCKET_WORKING_ADDED_SOME_NUMBER, data);
-    //seleniumInsstance.goto(HOME_URL);
 }
 
 const deletePhone = function(data){
@@ -102,7 +107,6 @@ const deletePhone = function(data){
     console.log("list number from server", arrayNumber);
     arrayNumber.splice(data.index,1);
     csvInstance.writeFile(arrayNumber);
-    // console.log("list number after delete", arrayNumber);
     socket.send(SOCKET_WORKING_DELETED_PHONE, arrayNumber);
 }
 
@@ -113,18 +117,16 @@ const editPhone = function(data){
     socket.send(SOCKET_WORKING_EDITED_PHONE, arrayNumber);
 }
 
-let random = () => {
-    let rd = Math.floor(Math.random() * 10);
-    console.log("number random", rd);
-    return rd;
-}
-
 const setIntervalPhone = function(data){
+    console.log("data in server", arrayNumber );
     arrayNumber.forEach((item, index) => {
-        item[index].info = setInterval(()=>{
-            random();
-        },2000);
+        item.interval = setInterval(()=>{
+            item.info = random();
+            console.log("random", item.info);
+            console.log("listphone after random", arrayNumber);
+            //csvInstance.writeFile(data.listPhone);
+            socket.send(SOCKET_SETINTERVALED_PHONE, {info: item.info, index: index});
+        },8000);
     });
-    socket.send(SOCKET_SETINTERVALED_PHONE, arrayNumber);
 }
 export default workingController;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import '../../assets/css/home/home.css';
 import { TH_STT, TH_PHONE, TH_MONEY, TH_INFO, TH_TRACK, TR_TYPE_NUMBER, TR_TYPE_MONEY, TR_TYPE_ADD, sampleData } from "../../constants/home/home.constant";
-import { ADD_PHONE, GET_LIST_PHONE } from "../../action/home/home.action";
+import { ADD_PHONE, GET_LIST_PHONE, SET_INTERVAL_PHONE } from "../../action/home/home.action";
 import { readFileExcel, createFileExcel } from "../../service/excel/excel.client.service";
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -22,8 +22,9 @@ export default function Home() {
         if(listPhone.length === 0){
             dispatch({ type: GET_LIST_PHONE, data: null });
         }
-    }, [listPhone]);
-
+        // khoi tao interval - duy nhat 1 lan
+        dispatch({type: SET_INTERVAL_PHONE});
+    }, []);
     
     let readFile = (e) => {
         readFileExcel(e.target.files[0], (data) => {

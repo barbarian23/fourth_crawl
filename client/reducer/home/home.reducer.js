@@ -83,16 +83,18 @@ export default function homeReducer(state = initialState, action) {
                 listPhone: action.data,
             }
         case SET_INTERVAL_PHONE_SUCCESS:
-            console.log("reducer set interval phone", action.data);
+            let tempPhone = [...state.listPhone];
+            // console.log("reducer set interval phone before", action.data);
+            tempPhone[action.data.index].info = action.data.info;
+            // console.log("reducer set interval phone after", tempPhone[action.data.index]);
+            // console.log("reducer set interval phone", tempPhone);
             return{
                 ...state,
-                listPhone: action.data,
+                listPhone: [...tempPhone],
             }
         default:
             return{
                 ...state
             }
     }
-
-    return Object.assign({}, state, { [action.type]: action.value });
 }

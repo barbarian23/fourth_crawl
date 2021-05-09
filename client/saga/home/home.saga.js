@@ -199,7 +199,10 @@ const setIntervalPhone = function* (action){
            console.log("respone", responce);
            yield put({
                type: SET_INTERVAL_PHONE_SUCCESS,
-               data: responce
+               data: {
+                    info: responce.info,
+                    index: responce.index,
+                }
            })
        }
    }

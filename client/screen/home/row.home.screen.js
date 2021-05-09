@@ -42,12 +42,12 @@ export default function Row(props) {
             setNewMoney(money);
     }
 
-    useEffect(()=>{
-        dispatch({
-            type: SET_INTERVAL_PHONE,
-            data: data,
-        })
-    },[]);
+    // useEffect(()=>{
+    //     dispatch({
+    //         type: SET_INTERVAL_PHONE,
+    //         data: data,
+    //     })
+    // },[]);
     if (!isEdited){
         return (
             <tr key={index}>
