@@ -54,7 +54,6 @@ export default function Home() {
     }
 
     let addNew = () => {
-        // console.log({ phone: phone, money: money })
         dispatch({ type: ADD_PHONE, data: { phone: phone, money: money } });
     }
 

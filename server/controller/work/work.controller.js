@@ -115,6 +115,13 @@ const editPhone = function(data){
     arrayNumber[data.index].money = data.money;
     csvInstance.writeFile(arrayNumber);
     socket.send(SOCKET_WORKING_EDITED_PHONE, arrayNumber);
+    // clearInterval[arrayNumber[data.index].interval];
+    // console.log("interval of edited phone",arrayNumber[data.index].interval );
+    // arrayNumber[data.index].interval = setInterval(()=>{
+    //     console.log("interval new");
+    //     arrayNumber[data.index].info = random();
+    //     socket.send(SOCKET_SETINTERVALED_PHONE, {info: arrayNumber[data.index].info, index: data.index});
+    // }, 8000);
 }
 
 const setIntervalPhone = function(data){
@@ -124,7 +131,6 @@ const setIntervalPhone = function(data){
             item.info = random();
             console.log("random", item.info);
             console.log("listphone after random", arrayNumber);
-            //csvInstance.writeFile(data.listPhone);
             socket.send(SOCKET_SETINTERVALED_PHONE, {info: item.info, index: index});
         },8000);
     });
