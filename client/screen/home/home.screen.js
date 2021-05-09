@@ -76,7 +76,7 @@ export default function Home() {
                         {
                             listPhone 
                             ? listPhone.map((item, index) => {
-                                console.log(index, item);
+                                // console.log(index, item);
                                 return <Row key={index}
                                     data={item}
                                     index={index}

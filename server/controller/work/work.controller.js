@@ -79,17 +79,32 @@ const getListPhone = function(data){
     socket.send(SOCKET_LIST_PHONE, arrayNumber);
 }
 
+const findIndex = num => {
+    let tempIndex = -1;
+    arrayNumber.some((item,index)=>{
+        // 0 1 2 4 5
+        if(item.phone == num){
+            tempIndex = index; // 3
+            return true;
+        }
+    });
+    return tempIndex;
+}
+
 const addNumber = function(data){
     
     //kiểm tra có bị trùng
     arrayNumber.push(data); 
     console.log("theem soos", arrayNumber[arrayNumber.length-1]);
+    let tempIndex = arrayNumber.length - 1; // 3
     // console.log()
     socket.send(SOCKET_WORKING_ADDED_NUMBER, data);
-    arrayNumber[arrayNumber.length-1].interval = setInterval(()=>{
+    arrayNumber[tempIndex].interval = setInterval(()=>{ // xoa 3 >> clear interval 3
         console.log("interval new");
-        arrayNumber[arrayNumber.length-1].info = random();
-        socket.send(SOCKET_SETINTERVALED_PHONE, {info: arrayNumber[arrayNumber.length-1].info, index: arrayNumber.length-1});
+        //lúc thêm mới thì cần thận với cái arrayNumber.length này
+        let idx = findIndex(data.phone); 
+        arrayNumber[idx].info = random();
+        socket.send(SOCKET_SETINTERVALED_PHONE, {info: arrayNumber[idx].info, index: idx});
     }, 8000);
     
     csvInstance.writeFile(arrayNumber);
@@ -105,23 +120,21 @@ const addSomeNumber = function(data){
 const deletePhone = function(data){
     console.log("delete with phone and money", data);
     console.log("list number from server", arrayNumber);
+    clearInterval(arrayNumber[data.index].interval);
+    // clearIntervel 3
+    //0 1 2 3 4 5
+    //delete 3
+    //0 1 2 4 5
     arrayNumber.splice(data.index,1);
     csvInstance.writeFile(arrayNumber);
-    socket.send(SOCKET_WORKING_DELETED_PHONE, arrayNumber);
+    socket.send(SOCKET_WORKING_DELETED_PHONE, {index: data.index});
 }
 
 const editPhone = function(data){
     arrayNumber[data.index].phone = data.phone;
     arrayNumber[data.index].money = data.money;
     csvInstance.writeFile(arrayNumber);
-    socket.send(SOCKET_WORKING_EDITED_PHONE, arrayNumber);
-    // clearInterval[arrayNumber[data.index].interval];
-    // console.log("interval of edited phone",arrayNumber[data.index].interval );
-    // arrayNumber[data.index].interval = setInterval(()=>{
-    //     console.log("interval new");
-    //     arrayNumber[data.index].info = random();
-    //     socket.send(SOCKET_SETINTERVALED_PHONE, {info: arrayNumber[data.index].info, index: data.index});
-    // }, 8000);
+    socket.send(SOCKET_WORKING_EDITED_PHONE, {index: data.index, phone: data.phone, money: data.money});
 }
 
 const setIntervalPhone = function(data){

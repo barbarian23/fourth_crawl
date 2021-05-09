@@ -59,7 +59,7 @@ const addNumberSaga = function* (action) {
     while (true) {
         let responce = yield take(result);
         if (responce) {
-            // console.log("responce", responce);
+            console.log("responce added", responce);
             yield put({
                 type: ADD_PHONE_SUCCESS,
                 value: responce

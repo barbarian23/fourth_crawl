@@ -35,19 +35,13 @@ export default function Row(props) {
     }
 
     let onChangeMoney = (e) => {
-        console.log("row money screen - e = ", e.target.value);
+        // console.log("row money screen - e = ", e.target.value);
         if(e.target.value != null || e.target.value != undefined)
             setNewMoney(e.target.value);
         else
             setNewMoney(money);
     }
 
-    // useEffect(()=>{
-    //     dispatch({
-    //         type: SET_INTERVAL_PHONE,
-    //         data: data,
-    //     })
-    // },[]);
     if (!isEdited){
         return (
             <tr key={index}>

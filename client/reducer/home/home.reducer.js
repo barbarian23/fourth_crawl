@@ -60,9 +60,11 @@ export default function homeReducer(state = initialState, action) {
             }
         case DELETE_PHONE_SUCCESS:
             console.log(" reducer after delete phone ", action.data)
+            let tempDelPhone = [...state.listPhone];
+            tempDelPhone.splice(action.data.index,1);
             return{
                 ...state,
-                listPhone: action.data,
+                listPhone: [...tempDelPhone],
             }
         case EDIT_PHONE:
             console.log(" reducer edit phone ", action.data);
@@ -71,10 +73,14 @@ export default function homeReducer(state = initialState, action) {
                 phoneNumber: action.data,
             }
         case EDIT_PHONE_SUCCESS:
-            console.log(" reducer after edit phone ", action.data);
+            console.log(" reducer after edit phone ", action.data.phone, " ", action.data.money);
+            let tempEditPhone = [...state.listPhone];
+            tempEditPhone[action.data.index].phone = action.data.phone;
+            tempEditPhone[action.data.index].money = action.data.money;
+            
             return{
                 ...state,
-                listPhone: action.data,
+                listPhone: [...tempEditPhone],
             }
         case SET_INTERVAL_PHONE:
             console.log("reducer set interval listphone", action.data);
@@ -84,10 +90,12 @@ export default function homeReducer(state = initialState, action) {
             }
         case SET_INTERVAL_PHONE_SUCCESS:
             let tempPhone = [...state.listPhone];
-            // console.log("reducer set interval phone before", action.data);
-            tempPhone[action.data.index].info = action.data.info;
-            // console.log("reducer set interval phone after", tempPhone[action.data.index]);
-            // console.log("reducer set interval phone", tempPhone);
+            // check null cho chac
+            // co truong hop server k tra ve/ tra ve k kip data
+            console.log("tempPhone is ", tempPhone,);
+            if(action.data){
+                tempPhone[action.data.index].info = action.data.info;
+            }
             return{
                 ...state,
                 listPhone: [...tempPhone],
