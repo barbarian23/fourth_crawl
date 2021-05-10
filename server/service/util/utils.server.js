@@ -13,4 +13,8 @@ export const getListNumberMoney = paragraph => {
     return found = paragraph.match(regex);
 }
 
+export const verifyNumberPhone = paragraph => {
+    var regex = /[^0][\d]]+/g;
+    return paragraph.match(regex);
+}
 

@@ -32,8 +32,11 @@ export default function Home() {
             //data là mảng chứa danh sách thuê bao và số tiền
             data.forEach((item, index) => {
                 //Bỏ qua dòng đầu vì là tiêu đề
+                
                 if (index > 0) {
-                    useDispatch({ type: ADD_PHONE, value: item });
+                    console.log("data in file excel", item);
+                    // useDispatch({ type: ADD_PHONE, value: item });
+                    dispatch({type: ADD_PHONE, data: { phone: item[0], money: item[1]}});
                 }
             });
         });
@@ -109,7 +112,7 @@ export default function Home() {
                 </div>    
                 <div id="crawl_login_file_input_up">
                     <img id="img_file_input" src='../assets/images/file.png' />
-                    <label htmlFor="xlsx">Bấm vào đây để chọn tệp(excel):</label>
+                    <label htmlFor="xlsx">Bấm vào đây để chọn tệp(excel)</label>
                     <input type="file"
                         id="xlsx" name="xlsx"
                         accept="xlsx" onChange={readFile} />

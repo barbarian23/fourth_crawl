@@ -19,7 +19,7 @@ import {
 } from "../../../common/constants/common.constants";
 import doLogin from "../work/login.controller";
 import { HOME_URL, WAIT_TIME } from "../../constants/work/work.constants";
-import { getListTdTag, getListMiddleNumber, getListNumberMoney } from "../../service/util/utils.server";
+import { getListTdTag, getListMiddleNumber, getListNumberMoney, verifyNumberPhone } from "../../service/util/utils.server";
 
 //selenium
 const webdriver = require('selenium-webdriver');
@@ -187,6 +187,12 @@ const getNumberInfo = async () => {
     });
 }
 
+let random = () => {
+    let rd = Math.floor(Math.random() * 10);
+    console.log("number random", rd);
+    return rd;
+}
+
 const login = function (data) {
     console.log("login voi username va password", data.username, data.password);
     doLogin(data.username, data.password, socket, driver, webdriver);
@@ -221,6 +227,9 @@ const addNumber = function (data) {
     //kiểm tra có bị trùng
     console.log("duplicate ", duplicateNumber(data.phone));
     if (duplicateNumber(data.phone) == false) {
+        // console.log("verifyNumberPhone data.phone", verifyNumberPhone(data.phone));
+        // data.phone = verifyNumberPhone(data.phone);
+        // console.log("data.phone", data.phone);
         arrayNumber.push(data);
         console.log("theem soos", arrayNumber[arrayNumber.length - 1]);
         let tempIndex = arrayNumber.length - 1; // 3
@@ -230,7 +239,8 @@ const addNumber = function (data) {
             //lúc thêm mới thì cần thận với cái arrayNumber.length này
             let idx = findIndex(data.phone);
             console.log("interval new", idx, arrayNumber[idx].phone);
-            arrayNumber[idx].info = await getNumberInfo();
+            //arrayNumber[idx].info = await getNumberInfo();
+            arrayNumber[idx].info = await random();
             await socket.send(SOCKET_SETINTERVALED_PHONE, { info: arrayNumber[idx].info, index: idx, phone: data.phone });
         }, WAIT_TIME);
         csvInstance.writeFile(arrayNumber);
@@ -269,18 +279,19 @@ const setIntervalPhone = async function (data) {
     console.log("data in server", arrayNumber);
 
     //đi tới trang tra cứu
-    await driver.get(HOME_URL);
+    // await driver.get(HOME_URL);
 
     // đợi trang load xong
-    await driver.wait(function () {
-        return driver.executeScript('return document.readyState').then(function (readyState) {
-            return readyState === 'complete';
-        });
-    });
+    // await driver.wait(function () {
+    //     return driver.executeScript('return document.readyState').then(function (readyState) {
+    //         return readyState === 'complete';
+    //     });
+    // });
 
     arrayNumber.forEach((item, index) => {
         item.interval = setInterval(async () => {
-            item.info = await getNumberInfo();
+            //item.info = await getNumberInfo();
+            item.info = await random();
             let idx = findIndex(item.phone);
             await socket.send(SOCKET_SETINTERVALED_PHONE, { info: item.info, index: idx, phone: item.phone });
         }, WAIT_TIME);
