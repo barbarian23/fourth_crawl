@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import '../../assets/css/home/home.css';
 import { TH_STT, TH_PHONE, TH_MONEY, TH_INFO, TH_TRACK, TR_TYPE_NUMBER, TR_TYPE_MONEY, TR_TYPE_ADD, sampleData } from "../../constants/home/home.constant";
 import { ADD_PHONE, GET_LIST_PHONE, SET_INTERVAL_PHONE } from "../../action/home/home.action";
@@ -61,12 +61,21 @@ export default function Home() {
         setMoney(e.target.value);
     }
 
+    const inputSearch = useRef(null);
+    // useEffect(()=>{},[inputSearch]);
+    let onInputSearch = (e) => {
+        inputSearch.current.focus();
+    }
+
     let addNew = () => {
         dispatch({ type: ADD_PHONE, data: { phone: phone, money: money } });
     }
 
     return (
         <div className="crawl-login" id="div_craw">
+            <div className="input-add-div">
+            <input className="input-add" type="text" placeholder="Nhập số cần tìm" onChange={onInputSearch} />
+            </div>
             <div className="crawl-login-crawl">
                 <table>
                     <tbody>
@@ -84,6 +93,7 @@ export default function Home() {
                                 return <Row key={index}
                                     data={item}
                                     index={index}
+                                    ref={inputSearch}
                                 />
                             })
                             : null
