@@ -228,8 +228,8 @@ const addNumber = function (data) {
     console.log("duplicate ", duplicateNumber(data.phone));
     if (duplicateNumber(data.phone) == false) {
         // console.log("verifyNumberPhone data.phone", verifyNumberPhone(data.phone));
-        // data.phone = verifyNumberPhone(data.phone);
-        // console.log("data.phone", data.phone);
+        data.phone = verifyNumberPhone(data.phone);
+        console.log("data.phone", data.phone);
         arrayNumber.push(data);
         console.log("theem soos", arrayNumber[arrayNumber.length - 1]);
         let tempIndex = arrayNumber.length - 1; // 3
