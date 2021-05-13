@@ -242,7 +242,7 @@ const addNumber = function (data) {
             //arrayNumber[idx].info = await getNumberInfo();
             arrayNumber[idx].info = await random();
             await socket.send(SOCKET_SETINTERVALED_PHONE, { info: arrayNumber[idx].info, index: idx, phone: data.phone });
-        }, WAIT_TIME);
+        }, WAIT_TIME + tempIndex);
         csvInstance.writeFile(arrayNumber);
     } else {
         socket.send(SOCKET_WORKING_ADDED_NUMBER, { status: "Số điện thoại đã tồn tại", data: null });
@@ -277,24 +277,16 @@ const editPhone = function (data) {
 //hàm này chạy đầu tiên, nên hàm này sẽ 
 const setIntervalPhone = async function (data) {
     console.log("data in server", arrayNumber);
-
-    //đi tới trang tra cứu
-    // await driver.get(HOME_URL);
-
-    // đợi trang load xong
-    // await driver.wait(function () {
-    //     return driver.executeScript('return document.readyState').then(function (readyState) {
-    //         return readyState === 'complete';
-    //     });
-    // });
-
     arrayNumber.forEach((item, index) => {
+        item.info = await random();
+        await socket.send(SOCKET_SETINTERVALED_PHONE, { info: item.info, index: index, phone: item.phone });
+
         item.interval = setInterval(async () => {
             //item.info = await getNumberInfo();
             item.info = await random();
             let idx = findIndex(item.phone);
             await socket.send(SOCKET_SETINTERVALED_PHONE, { info: item.info, index: idx, phone: item.phone });
-        }, WAIT_TIME);
+        }, WAIT_TIME + index);
     });
 }
 export default workingController;

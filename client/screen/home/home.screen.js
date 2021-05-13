@@ -73,9 +73,9 @@ export default function Home() {
 
     return (
         <div className="crawl-login" id="div_craw">
-            <div className="input-add-div">
+            {/* <div className="input-add-div">
             <input className="input-add" type="text" placeholder="Nhập số cần tìm" onChange={onInputSearch} />
-            </div>
+            </div> */}
             <div className="crawl-login-crawl">
                 <table>
                     <tbody>
@@ -93,7 +93,6 @@ export default function Home() {
                                 return <Row key={index}
                                     data={item}
                                     index={index}
-                                    ref={inputSearch}
                                 />
                             })
                             : null
