@@ -6,12 +6,7 @@
   "scripts": {
     "build": "webpack --mode=production",
     "dev": "webpack && concurrently \"webpack --watch\" \"nodemon --delay 1 dist/index.js\"",
-    "electron-build": "electron-builder",
-    "release": "webpack --mode production && npm run electron-build",
-    "electron-pack": "npm run build --win --macos -c.extraMetadata.main=build/index.js",
-    "start": "concurrently \"cross-env BROWSER=none npm run dev\" \"wait-on http://localhost:3000/home && npm run electron\"",
-    "electron-js": "concurrently \"cross-env BROWSER=none npm run dev\" \"wait-on http://localhost:3000/home && npm run electron\"",
-    "electron": "electron ."
+    "release": "webpack --mode production && npm run electron-build"
   },
   "author": "",
   "license": "ISC",
@@ -27,6 +22,7 @@
     "fs": "0.0.1-security",
     "http": "0.0.1-security",
     "path": "^0.12.7",
+    "puppeteer": "^9.1.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",

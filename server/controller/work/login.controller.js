@@ -1,5 +1,5 @@
-import { LOGIN_URL } from "../../constants/work/work.constants";
-import { SOCKET_LOGIN_INCORRECT, SOCKET_LOGIN_STATUS } from "../../../common/constants/common.constants";
+import { LOGIN_URL, HOME_URL } from "../../constants/work/work.constants";
+import { SOCKET_SOMETHING_ERROR, SOCKET_LOGIN_INCORRECT, SOCKET_LOGIN_STATUS } from "../../../common/constants/common.constants";
 
 
 const DEFAULT_DELAY = 2000;
@@ -14,53 +14,65 @@ function timer(ms) {
 }
 
 // do login
-async function doLogin(username, password, socket, driver, webdriver) {
+async function doLogin(username, password, socket, driver) {
     try {
-        //driver.build();
 
+
+        //driver.build();
+        console.log("username ", username, "password", password);
         // go to login url
-        await driver.get(LOGIN_URL);
+        await driver.goto(LOGIN_URL);
 
         // wait to complete
-        await driver.wait(function () {
-            return driver.executeScript('return document.readyState').then(function (readyState) {
-                return readyState === 'complete';
-            });
-        });
+        await driver.waitForFunction('document.readyState === "complete"');
 
         // select to username input & send username
-        let selector = "#login_field";
-        await driver.findElement(webdriver.By.css(selector)).clear();
-        await driver.findElement(webdriver.By.css(selector)).sendKeys(username);
+        let selector = "body #ctl01 .page .main .accountInfo #MainContent_LoginUser_UserName";
+        await driver.$eval(selector, (el, value) => el.value = value, username);
 
         // select to password input & send password
-        selector = "#password";
-        await driver.findElement(webdriver.By.css(selector)).clear();
-        await driver.findElement(webdriver.By.css(selector)).sendKeys(password);
+        selector = "body #ctl01 .page .main .accountInfo #MainContent_LoginUser_Password";
+        await driver.$eval(selector, (el, value) => el.value = value, password);
 
         // select to button login & click button
-        selector = "#login > div.auth-form-body.mt-3 > form > div > input.btn.btn-primary.btn-block";
-        await driver.findElement(webdriver.By.css(selector)).click();
+        selector = "body #ctl01 .page .main .accountInfo #MainContent_LoginUser_LoginButton";
+        await Promise.all([driver.click(selector), driver.waitForNavigation({ waitUntil: 'networkidle0' })]);
 
         await timer(2000);
 
-        selector = "#js-flash-container > div > div";
-        let incorrect = await driver.executeScript("return document.querySelector('#js-flash-container > div > div')");
-        if (incorrect){
+        
+
+        let dataFromLoginSummarySpan = await driver.$$eval("body #ctl01 .page .main .failureNotification", spanData => spanData.map((span) => {
+            return span.innerHTML;
+        }));
+
+        if (dataFromLoginSummarySpan.length > 0) {
             socket.send(SOCKET_LOGIN_INCORRECT, { data: -1 });
             return;
         }
 
-        await driver.wait(function () {
-            return driver.executeScript("return location.href").then((url) => {
-                return url.includes("https://github.com");
-            });
-        });
+
+
+
+        //let curUrl = await driver.waitForFunction("location.href");
+
+        //const curUrl = await page.evaluate(new Function('name', "return new Promise(resolve => {resolve('done')});"), name);
+
+
+
         socket.send(SOCKET_LOGIN_STATUS, { data: 1 });
 
+        // console.log("url", curUrl);
+
+        // if (curUrl.includes("https://github.com")) {
+        //     socket.send(SOCKET_LOGIN_STATUS, { data: 1 });
+        // }
+
+        await driver.goto(HOME_URL);
 
     } catch (e) {
         console.log("Login Error", e);
+        socket.send(SOCKET_LOGIN_INCORRECT, { data: -1 });
         socket.send(SOCKET_SOMETHING_ERROR, { data: 0 });
     }
 }
