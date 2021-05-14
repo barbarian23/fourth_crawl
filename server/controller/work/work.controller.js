@@ -98,52 +98,53 @@ const workingController = async function (server) {
         //tạo các hàm  sẵn có
 
         //hàm downlaod html
-        await driver.exposeFunction("mdownload", async (phone) => {
-            function get() {
-                return new Promise((resolve, reject) => {
-                    try {
-                        let first = document.querySelector("#ctl01 > div:nth-child(1)").getElementsByTagName("input");
+        await driver.evaluate(() => {
+            window.getPhone = (phone) => {
+                let get = () => {
+                    return new Promise((resolve, reject) => {
+                        try {
+                            let first = document.querySelector("#ctl01 > div:nth-child(1)").getElementsByTagName("input");
 
-                        let form = first[0].id + "=" + first[0].value + "&" + first[1].id + "=" + first[1].value + "&" + first[2].id + "=" + encodeURIComponent(first[2].value) + "&";
-
-
-                        let second = document.querySelector("#ctl01 > div:nth-child(4)").getElementsByTagName("input");
-
-                        form = form + second[0].id + "=" + encodeURIComponent(second[0].value) + "&ctl00%24MainContent%24msisdn=" + phone + "&ctl00%24MainContent%24submit_button=T%C3%ACm+ki%E1%BA%BFm";
+                            let form = first[0].id + "=" + first[0].value + "&" + first[1].id + "=" + first[1].value + "&" + first[2].id + "=" + encodeURIComponent(first[2].value) + "&";
 
 
+                            let second = document.querySelector("#ctl01 > div:nth-child(4)").getElementsByTagName("input");
 
-                        let formData = new FormData();
-                        formData.append("", form);
-                        fetch("https://10.156.0.19/Account/Subs_info_120days.aspx", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/x-www-form-urlencoded",
-                            },
-                            body: formData,
-                        })
-                            .then(response => { return response.text(); })
-                            .then(data => {
-                                resolve(data);
+                            form = form + second[0].id + "=" + encodeURIComponent(second[0].value) + "&ctl00%24MainContent%24msisdn=" + phone + "&ctl00%24MainContent%24submit_button=T%C3%ACm+ki%E1%BA%BFm";
+
+
+
+                            let formData = new FormData();
+                            formData.append("", form);
+                            fetch("https://10.156.0.19/Account/Subs_info_120days.aspx", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/x-www-form-urlencoded",
+                                },
+                                body: formData,
                             })
-                            .catch((error) => {
-                                reject(e);
-                            });
+                                .then(response => { return response.text(); })
+                                .then(data => {
+                                    resolve(data);
+                                })
+                                .catch((error) => {
+                                    reject(e);
+                                });
+                        } catch (e) {
+                            reject(e);
+                        }
+                    });
+                }
+
+                return new Promise(async (resolve, reject) => {
+                    try {
+                        let resultt = await get(phone);
+                        resolve(resultt);
                     } catch (e) {
-                        reject(e);
+                        reject(null);
                     }
                 });
             }
-
-            return new Promise(async (resolve, reject) => {
-                try {
-                    let resultt = await get();
-                    resolve(resultt);
-                } catch (e) {
-                    reject(null);
-                }
-            });
-            
         });
 
 
@@ -227,9 +228,9 @@ const watchPhone = (phone) => {
             'return await action()';
         try {
             //let html = await driver.executeScript(scriptGetPhone);
-            let html = await driver.evaluate(() => {
-                return window.mdownload(phone);
-            });
+            let html = await driver.evaluate((tPhone) => {
+                return await getPhone(tPhone);
+            },phone);
             await socket.send(SOCKET_LOG, { message: "html content", data: html });
             res(html);
         } catch (e) {
@@ -248,18 +249,18 @@ const getListTrInTable = async (htmlContent) => {
 }
 
 //lấy ra number có thể kèm theo các ký tự đặc biệt như ><
-const getMiddleNumber = (numberWithSpecial) => {
+const getMiddleNumber = (listTr) => {
     return new Promise(async (res, rej) => {
-        let numberWithSpecial = await getListMiddleNumber(numberWithSpecial);
+        let numberWithSpecial = await getListMiddleNumber(listTr);
         await socket.send(SOCKET_LOG, { message: "number uiwth spcial tr", data: numberWithSpecial });
         res(numberWithSpecial);
     });
 }
 
 //lấy ra number từ 1 đoạn string có chứa số kèm theo 1 số ký tư đặc gbiejet như b><
-const getNumberMoney = (number) => {
+const getNumberMoney = (numberSpecial) => {
     return new Promise(async (res, rej) => {
-        let number = await getListNumberMoney(number);
+        let number = await getListNumberMoney(numberSpecial);
         await socket.send(SOCKET_LOG, { message: "number", data: number });
         res(numberWithSpecial);
     });
