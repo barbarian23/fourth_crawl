@@ -78,6 +78,7 @@ const preparePuppteer = function () {
     return new Promise((res, rej) => {
         //C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe
         //C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe
+        exPath = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe";
         puppeteer.launch({ args: ["--no-sandbox", "--proxy-server='direct://'", '--proxy-bypass-list=*'], headless: false, ignoreHTTPSErrors: true, executablePath: exPath == "" ? "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe" : exPath })
             .then(async (browser) => {
                 let pageLogin = await browser.newPage();
@@ -95,60 +96,8 @@ const workingController = async function (server) {
     try {
         driver = await preparePuppteer();
 
-        //tạo các hàm  sẵn có
-
-        //hàm downlaod html
-        await driver.evaluate(() => {
-            window.getPhone = (phone) => {
-                let get = () => {
-                    return new Promise((resolve, reject) => {
-                        try {
-                            let first = document.querySelector("#ctl01 > div:nth-child(1)").getElementsByTagName("input");
-
-                            let form = first[0].id + "=" + first[0].value + "&" + first[1].id + "=" + first[1].value + "&" + first[2].id + "=" + encodeURIComponent(first[2].value) + "&";
-
-
-                            let second = document.querySelector("#ctl01 > div:nth-child(4)").getElementsByTagName("input");
-
-                            form = form + second[0].id + "=" + encodeURIComponent(second[0].value) + "&ctl00%24MainContent%24msisdn=" + phone + "&ctl00%24MainContent%24submit_button=T%C3%ACm+ki%E1%BA%BFm";
-
-
-
-                            let formData = new FormData();
-                            formData.append("", form);
-                            fetch("https://10.156.0.19/Account/Subs_info_120days.aspx", {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/x-www-form-urlencoded",
-                                },
-                                body: formData,
-                            })
-                                .then(response => { return response.text(); })
-                                .then(data => {
-                                    resolve(data);
-                                })
-                                .catch((error) => {
-                                    reject(e);
-                                });
-                        } catch (e) {
-                            reject(e);
-                        }
-                    });
-                }
-
-                return new Promise(async (resolve, reject) => {
-                    try {
-                        let resultt = await get(phone);
-                        resolve(resultt);
-                    } catch (e) {
-                        reject(null);
-                    }
-                });
-            }
-        });
-
-
-
+        
+        
 
         //khoi tao socket 
         socket = socketServer(server);
@@ -181,59 +130,67 @@ const workingController = async function (server) {
 }
 
 //lấy ra đoạn html bằng 1 đoạn javascript
-const watchPhone = (phone) => {
+const watchPhone = async (phone) => {
     return new Promise(async (res, rej) => {
-        let scriptGetPhone = 'async function action(){' +
-            'function get(){' +
-            'return new Promise((resolve,reject)=>{' +
-            'try{' +
-            'let first = document.querySelector("#ctl01 > div:nth-child(1)").getElementsByTagName("input");' +
+        // let scriptGetPhone = 'async function action(){' +
+        //     'function get(){' +
+        //     'return new Promise((resolve,reject)=>{' +
+        //     'try{' +
+        //     'let first = document.querySelector("#ctl01 > div:nth-child(1)").getElementsByTagName("input");' +
 
-            'let form = first[0].id + "=" + first[0].value + "&" + first[1].id + "=" + first[1].value + "&" + first[2].id + "=" + encodeURIComponent(first[2].value) + "&";' +
+        //     'let form = first[0].id + "=" + first[0].value + "&" + first[1].id + "=" + first[1].value + "&" + first[2].id + "=" + encodeURIComponent(first[2].value) + "&";' +
 
 
-            'let second = document.querySelector("#ctl01 > div:nth-child(4)").getElementsByTagName("input");' +
+        //     'let second = document.querySelector("#ctl01 > div:nth-child(4)").getElementsByTagName("input");' +
 
-            'form = form + second[0].id + "=" + encodeURIComponent(second[0].value) + "&ctl00%24MainContent%24msisdn=' + phone + '&ctl00%24MainContent%24submit_button=T%C3%ACm+ki%E1%BA%BFm";' +
+        //     'form = form + second[0].id + "=" + encodeURIComponent(second[0].value) + "&ctl00%24MainContent%24msisdn=' + phone + '&ctl00%24MainContent%24submit_button=T%C3%ACm+ki%E1%BA%BFm";' +
 
-            'let formData = new FormData();' +
-            'formData.append("", form);' +
-            'fetch("https://10.156.0.19/Account/Subs_info_120days.aspx", {' +
-            'method: "POST",' +
-            'headers: {' +
-            '"Content-Type": "application/x-www-form-urlencoded",' +
-            '},' +
-            'body: formData,' +
-            '})' +
-            '.then(response => { console.log(response.text());return response.text(); })' +
-            '.then(data => {' +
-            'resolve(data);' +
-            '})' +
-            '.catch((error) => {' +
-            'reject(e);' +
-            '});' +
-            '}catch (e) {' +
-            'reject(e);' +
-            '}' +
-            '});' +
-            '}' +
-            'try {' +
-            'let resultt = await get();' +
-            'return resultt;' +
-            '} catch (e) {' +
-            'return null;' +
-            '}' +
-            '}";' +
+        //     'let formData = new FormData();' +
+        //     'formData.append("", form);' +
+        //     'fetch("https://10.156.0.19/Account/Subs_info_120days.aspx", {' +
+        //     'method: "POST",' +
+        //     'headers: {' +
+        //     '"Content-Type": "application/x-www-form-urlencoded",' +
+        //     '},' +
+        //     'body: formData,' +
+        //     '})' +
+        //     '.then(response => { console.log(response.text());return response.text(); })' +
+        //     '.then(data => {' +
+        //     'resolve(data);' +
+        //     '})' +
+        //     '.catch((error) => {' +
+        //     'reject(e);' +
+        //     '});' +
+        //     '}catch (e) {' +
+        //     'reject(e);' +
+        //     '}' +
+        //     '});' +
+        //     '}' +
+        //     'try {' +
+        //     'let resultt = await get();' +
+        //     'return resultt;' +
+        //     '} catch (e) {' +
+        //     'return null;' +
+        //     '}' +
+        //     '};' +
 
-            'return await action()';
+        //     'return await action()';
         try {
+            //let html = await driver.evaluate("(async function (){return await getPhone("+phone+")}())");
+
+            let html = await driver.evaluate("getPhone("+phone+")");
+
             //let html = await driver.executeScript(scriptGetPhone);
-            let html = await driver.evaluate((tPhone) => {
-                return await getPhone(tPhone);
-            },phone);
+            
+            // let html = await driver.evaluate(async (tPhone) => {
+            //     console.log("phone is", tPhone);
+            //     return await getPhone(tPhone);
+            // }, phone);
+
             await socket.send(SOCKET_LOG, { message: "html content", data: html });
             res(html);
         } catch (e) {
+            console.log("error watchPhone", e);
             rej(e);
         }
     });
@@ -262,7 +219,7 @@ const getNumberMoney = (numberSpecial) => {
     return new Promise(async (res, rej) => {
         let number = await getListNumberMoney(numberSpecial);
         await socket.send(SOCKET_LOG, { message: "number", data: number });
-        res(numberWithSpecial);
+        res(number);
     });
 }
 
@@ -273,17 +230,21 @@ const getNumberInfo = async (phone) => {
         try {
             //lấy ra đoạn html
             let htmlContent = await watchPhone(phone);
+            console.log("htmlContent", htmlContent.length);
             //lấy ra các tr
             let listTr = await getListTrInTable(htmlContent);
+            console.log("listTr", listTr.length);
             //lấy ra số điện thoại, có thể bao gồm với các ngoặc ><. dùng tr thứ 5
             let numberSpecial = await getMiddleNumber(listTr[5]);
+            console.log("numberSpecial", numberSpecial[0]);
             //lấy ra number
             let number = await getNumberMoney(numberSpecial[0]);
+            console.log("number", number[0]);
 
             res(number[0]);
 
         } catch (e) {
-            console.log(e);
+            console.log("getNumberInfo error",e);
         }
     });
 }
@@ -323,7 +284,7 @@ const duplicateNumber = num => {
     });
     return bool;
 }
-const addNumber = function (data) {
+const addNumber = async function (data) {
 
     //kiểm tra có bị trùng
     console.log("duplicate ", duplicateNumber(data.phone));
@@ -336,6 +297,11 @@ const addNumber = function (data) {
         let tempIndex = arrayNumber.length - 1; // 3
         // console.log()
         socket.send(SOCKET_WORKING_ADDED_NUMBER, { status: 200, data: data });
+
+        //gọi lại lần đầu
+        data.info = await getNumberInfo(data.phone);
+        await socket.send(SOCKET_SETINTERVALED_PHONE, { info: data.info, index: tempIndex, phone: data.phone });
+
         arrayNumber[tempIndex].interval = setInterval(async () => { // xoa 3 >> clear interval 3
             //lúc thêm mới thì cần thận với cái arrayNumber.length này
             let idx = findIndex(data.phone);

@@ -1,20 +1,40 @@
 export const getListTdTag = paragraph => {
-    var regex = "[<][t][d][^>]+>[^<]+<\/td>/gm";
-    return found = paragraph.match(regex);
+    try {
+        var regex = /[<][t][d][^>]+>[^<]+<\/td>/g;
+        return paragraph.match(regex);
+    } catch (e) {
+        console.log("getListTdTag error",e);
+        return [""];
+    }
 }
 
 export const getListMiddleNumber = paragraph => {
-    var regex = "([>]|[\s])[\d][^<]+</gm";
-    return found = paragraph.match(regex);
+    try {
+        var regex = /([>]|[\s])[\d][^<]+</g;
+        return paragraph.match(regex);
+    } catch (e) {
+        console.log("getListMiddleNumber error",e);
+        return [""];
+    }
 }
 
 export const getListNumberMoney = paragraph => {
-    var regex = "[\d]+[^<]+/gm";
-    return found = paragraph.match(regex);
+    try {
+        var regex = /[\d]+[^<]+/g;
+        return paragraph.match(regex);
+    } catch (e) {
+        console.log("getListNumberMoney error",e);
+        return [""];
+    }
 }
 
 export const verifyNumberPhone = paragraph => {
-    var regex = /[^0][\d]+/g;
-    return paragraph.match(regex) + "";
+    try {
+        var regex = /[^0][\d]+/g;
+        return paragraph.match(regex) + "";
+    } catch (e) {
+        console.log("verifyNumberPhone error",e);
+        return [""];
+    }
 }
 
