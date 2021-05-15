@@ -48,7 +48,7 @@ export default function Row(props) {
                 <td>{index + 1}</td>
                 <td>{phone}</td>
                 <td>{money}</td>   
-                <td>{info}</td>             
+                <td>{Number.parseFloat(info)  == -1 ? "Lỗi số" : info}</td>             
                 <td>
                     <div className="btn edit" onClick={editPhone}>{TH_EDIT}</div>
                     <div className="btn delete" onClick={()=>dispatchToStore({type: DELETE_PHONE, data:{index: index, phone: phone, money: money, info: info}})}>{TH_DELETE}</div>
@@ -61,7 +61,7 @@ export default function Row(props) {
                 <td>{index + 1}</td>
                 <td><input type="text" placeholder="Nhập số điện thoại" onChange={onChangePhone} defaultValue={phone}/></td>
                 <td><input type="text" placeholder="Nhập số tiền" onChange={onChangeMoney} defaultValue={money}/></td>
-                <td style={{backgroundColor: (Number.parseFloat(data.info) >= Number.parseFloat(data.money))?"#00FF00":"#FFFFFF"}}>{info}</td> 
+                <td style={{backgroundColor: (Number.parseFloat(data.info) >= Number.parseFloat(data.money))?"#00FF00":"#FFFFFF"}}>{Number.parseFloat(info)  == -1 ? "Lỗi số" : info}</td> 
                 <td>
                     <div className="done" 
                          onClick={()=>{

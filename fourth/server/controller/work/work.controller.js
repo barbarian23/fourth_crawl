@@ -84,7 +84,7 @@ const preparePuppteer = function () {
     return new Promise((res, rej) => {
         puppeteer.launch({
             args: ["--no-sandbox", "--proxy-server='direct://'", '--proxy-bypass-list=*'],
-            headless: false,
+            headless: true,
             ignoreHTTPSErrors: true,
             executablePath: exPath == "" ? "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe" : exPath
         })
@@ -267,6 +267,7 @@ const getNumberInfo = async (phone) => {
 
         } catch (e) {
             console.log("getNumberInfo error", e);
+            rej(e);
         }
     });
 }
@@ -278,8 +279,8 @@ let random = () => {
 }
 
 const inJectGetPhone = async () => {
-    try{
-    let stringF = 'window.getPhone = async (phone) => {' +
+    try {
+        let stringF = 'window.getPhone = async (phone) => {' +
             'console.log(phone);' +
             'async function action(){' +
             'function get(){' +
@@ -330,8 +331,8 @@ const inJectGetPhone = async () => {
             '}';
 
         await driver.evaluate(stringF);
-    }catch(e){
-        console.log("inject getPhone error",e);
+    } catch (e) {
+        console.log("inject getPhone error", e);
     }
 }
 
@@ -379,17 +380,24 @@ const addNumber = async function (data) {
         socket.send(SOCKET_WORKING_ADDED_NUMBER, { status: 200, data: data });
 
         //gọi lại lần đầu
-        data.info = await getNumberInfo(data.phone);
-        await socket.send(SOCKET_SETINTERVALED_PHONE, { info: data.info, index: tempIndex, phone: data.phone });
-
+        try {
+            data.info = await getNumberInfo(data.phone);
+            await socket.send(SOCKET_SETINTERVALED_PHONE, { info: data.info, index: tempIndex, phone: data.phone });
+        } catch (e) {
+            await socket.send(SOCKET_SETINTERVALED_PHONE, { info: -1, index: tempIndex, phone: data.phone });
+        }
         arrayNumber[tempIndex].interval = setInterval(async () => { // xoa 3 >> clear interval 3
             //lúc thêm mới thì cần thận với cái arrayNumber.length này
             let idx = findIndex(data.phone);
             //console.log("interval new", idx, arrayNumber[idx].phone);
             //arrayNumber[idx].info = await getNumberInfo();
             countInterval++;
-            arrayNumber[idx].info = await getNumberInfo(arrayNumber[idx].phone);
-            await socket.send(SOCKET_SETINTERVALED_PHONE, { info: arrayNumber[idx].info, index: idx, phone: data.phone });
+            try {
+                arrayNumber[idx].info = await getNumberInfo(arrayNumber[idx].phone);
+                await socket.send(SOCKET_SETINTERVALED_PHONE, { info: arrayNumber[idx].info, index: idx, phone: data.phone });
+            } catch (e) {
+                await socket.send(SOCKET_SETINTERVALED_PHONE, { info: -1, index: idx, phone: data.phone });
+            }
         }, WAIT_TIME + tempIndex);
         csvInstance.writeFile(arrayNumber);
     } else {
@@ -432,15 +440,22 @@ const setIntervalPhone = async function (data) {
         await socket.send(SOCKET_LOG, { message: "setIntervalPhone" });
         //console.log("data in server", arrayNumber);
         arrayNumber.forEach(async (item, index) => {
+            try {
             item.info = await getNumberInfo(item.phone);
             await socket.send(SOCKET_SETINTERVALED_PHONE, { info: item.info, index: index, phone: item.phone });
-
+            }catch(e){
+                await socket.send(SOCKET_SETINTERVALED_PHONE, { info: -1, index: index, phone: item.phone });
+            }
             item.interval = setInterval(async () => {
                 //item.info = await getNumberInfo();
                 countInterval++;
-                item.info = await getNumberInfo(item.phone);
                 let idx = findIndex(item.phone);
+                try{
+                item.info = await getNumberInfo(item.phone);
                 await socket.send(SOCKET_SETINTERVALED_PHONE, { info: item.info, index: idx, phone: item.phone });
+                }catch(e){
+                    await socket.send(SOCKET_SETINTERVALED_PHONE, { info: -1, index: idx, phone: item.phone });
+                }
             }, WAIT_TIME + index);
         });
     } catch (e) {
