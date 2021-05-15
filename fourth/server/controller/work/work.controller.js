@@ -22,7 +22,9 @@ import { HOME_URL, WAIT_TIME } from "../../constants/work/work.constants";
 import { getListTdTag, getListMiddleNumber, getListNumberMoney, verifyNumberPhone } from "../../service/util/utils.server";
 
 const puppeteer = require('puppeteer');
-let exPath = "";
+//C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe
+//C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe
+let exPath = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe";
 var driver;
 
 //selenium
@@ -76,10 +78,11 @@ try {
 
 const preparePuppteer = function () {
     return new Promise((res, rej) => {
-        //C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe
-        //C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe
-        exPath = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe";
-        puppeteer.launch({ args: ["--no-sandbox", "--proxy-server='direct://'", '--proxy-bypass-list=*'], headless: true, ignoreHTTPSErrors: true, executablePath: exPath == "" ? "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe" : exPath })
+        puppeteer.launch({ 
+            args: ["--no-sandbox", "--proxy-server='direct://'", '--proxy-bypass-list=*'], 
+            headless: false, 
+            ignoreHTTPSErrors: true, 
+            executablePath: exPath == "" ? "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe" : exPath })
             .then(async (browser) => {
                 let pageLogin = await browser.newPage();
                 pageLogin.setViewport({ width: 2600, height: 3800 });
@@ -96,8 +99,8 @@ const workingController = async function (server) {
     try {
         driver = await preparePuppteer();
 
-        
-        
+
+
 
         //khoi tao socket 
         socket = socketServer(server);
@@ -178,10 +181,10 @@ const watchPhone = async (phone) => {
         try {
             //let html = await driver.evaluate("(async function (){return await getPhone("+phone+")}())");
 
-            let html = await driver.evaluate("getPhone("+phone+")");
+            let html = await driver.evaluate("getPhone(" + phone + ")");
 
             //let html = await driver.executeScript(scriptGetPhone);
-            
+
             // let html = await driver.evaluate(async (tPhone) => {
             //     console.log("phone is", tPhone);
             //     return await getPhone(tPhone);
@@ -244,7 +247,7 @@ const getNumberInfo = async (phone) => {
             res(number[0]);
 
         } catch (e) {
-            console.log("getNumberInfo error",e);
+            console.log("getNumberInfo error", e);
         }
     });
 }

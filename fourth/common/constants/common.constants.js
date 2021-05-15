@@ -1,5 +1,5 @@
 //client
-export const CLIENT_LOGIN = "/login";
+export const CLIENT_LOGIN = "/";
 export const CLIENT_HOME = "/home";
 export const CLIENT = "/client";
 

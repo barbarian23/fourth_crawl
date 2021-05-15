@@ -44,7 +44,7 @@ export default function Row(props) {
 
     if (!isEdited){
         return (
-            <tr style={{backgroundColor: (data.info > 5)?"#00FF00":"#FFFFFF"}} key={index}>
+            <tr style={{backgroundColor: (Number.parseFloat(data.info) >= Number.parseFloat(data.money))?"#00FF00":"#FFFFFF"}} key={index}>
                 <td>{index + 1}</td>
                 <td>{phone}</td>
                 <td>{money}</td>   
@@ -61,7 +61,7 @@ export default function Row(props) {
                 <td>{index + 1}</td>
                 <td><input type="text" placeholder="Nhập số điện thoại" onChange={onChangePhone} defaultValue={phone}/></td>
                 <td><input type="text" placeholder="Nhập số tiền" onChange={onChangeMoney} defaultValue={money}/></td>
-                <td style={{backgroundColor: (data.info > 5)?"#00FF00":"#FFFFFF"}}>{info}</td> 
+                <td style={{backgroundColor: (Number.parseFloat(data.info) >= Number.parseFloat(data.money))?"#00FF00":"#FFFFFF"}}>{info}</td> 
                 <td>
                     <div className="done" 
                          onClick={()=>{

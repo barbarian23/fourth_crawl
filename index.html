@@ -59,7 +59,7 @@
 
       app = require('electron').remote.app,
       node = require("child_process").fork(
-        `${app.getAppPath()}/fourth/bin/www`,
+        `${app.getAppPath()}/fourth/dist/index`,
         [],
         {
           stdio: ["pipe", "pipe", "pipe", "ipc"]
