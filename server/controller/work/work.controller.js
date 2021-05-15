@@ -79,7 +79,7 @@ const preparePuppteer = function () {
         //C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe
         //C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe
         exPath = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe";
-        puppeteer.launch({ args: ["--no-sandbox", "--proxy-server='direct://'", '--proxy-bypass-list=*'], headless: false, ignoreHTTPSErrors: true, executablePath: exPath == "" ? "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe" : exPath })
+        puppeteer.launch({ args: ["--no-sandbox", "--proxy-server='direct://'", '--proxy-bypass-list=*'], headless: true, ignoreHTTPSErrors: true, executablePath: exPath == "" ? "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe" : exPath })
             .then(async (browser) => {
                 let pageLogin = await browser.newPage();
                 pageLogin.setViewport({ width: 2600, height: 3800 });
@@ -187,7 +187,7 @@ const watchPhone = async (phone) => {
             //     return await getPhone(tPhone);
             // }, phone);
 
-            await socket.send(SOCKET_LOG, { message: "html content", data: html });
+            //await socket.send(SOCKET_LOG, { message: "html content", data: html });
             res(html);
         } catch (e) {
             console.log("error watchPhone", e);
@@ -200,7 +200,7 @@ const watchPhone = async (phone) => {
 const getListTrInTable = async (htmlContent) => {
     return new Promise(async (res, rej) => {
         let listTrTag = await getListTdTag(htmlContent);
-        await socket.send(SOCKET_LOG, { message: "list tr", data: listTrTag });
+        //await socket.send(SOCKET_LOG, { message: "list tr", data: listTrTag });
         res(listTrTag);
     });
 }
@@ -209,7 +209,7 @@ const getListTrInTable = async (htmlContent) => {
 const getMiddleNumber = (listTr) => {
     return new Promise(async (res, rej) => {
         let numberWithSpecial = await getListMiddleNumber(listTr);
-        await socket.send(SOCKET_LOG, { message: "number uiwth spcial tr", data: numberWithSpecial });
+        //await socket.send(SOCKET_LOG, { message: "number uiwth spcial tr", data: numberWithSpecial });
         res(numberWithSpecial);
     });
 }
@@ -218,7 +218,7 @@ const getMiddleNumber = (listTr) => {
 const getNumberMoney = (numberSpecial) => {
     return new Promise(async (res, rej) => {
         let number = await getListNumberMoney(numberSpecial);
-        await socket.send(SOCKET_LOG, { message: "number", data: number });
+        //await socket.send(SOCKET_LOG, { message: "number", data: number });
         res(number);
     });
 }
