@@ -16,8 +16,6 @@ function timer(ms) {
 // do login
 async function doLogin(username, password, socket, driver) {
     try {
-
-
         //driver.build();
         console.log("username ", username, "password", password);
         // go to login url
@@ -52,15 +50,18 @@ async function doLogin(username, password, socket, driver) {
         }
 
 
+        //đi tới trang thông tin số
+        await driver.goto(HOME_URL);
+
+        // wait to complete
+        await driver.waitForFunction('document.readyState === "complete"');
+
+        socket.send(SOCKET_LOGIN_STATUS, { data: 1 });
 
 
         //let curUrl = await driver.waitForFunction("location.href");
 
         //const curUrl = await page.evaluate(new Function('name', "return new Promise(resolve => {resolve('done')});"), name);
-
-
-
-        socket.send(SOCKET_LOGIN_STATUS, { data: 1 });
 
         // console.log("url", curUrl);
 
@@ -68,7 +69,7 @@ async function doLogin(username, password, socket, driver) {
         //     socket.send(SOCKET_LOGIN_STATUS, { data: 1 });
         // }
 
-        await driver.goto(HOME_URL);
+       
 
         //tạo các hàm  sẵn có
 
@@ -122,59 +123,6 @@ async function doLogin(username, password, socket, driver) {
         //         });
         //     }
         // });
-
-        let stringF = 'window.getPhone = async (phone) => {' +
-            'console.log(phone);' +
-            'async function action(){' +
-            'function get(){' +
-            'return new Promise((resolve,reject)=>{' +
-            'try{' +
-            'let first = document.querySelector("#ctl01 > div:nth-child(1)").getElementsByTagName("input");' +
-
-            'let form = first[0].id + "=" + first[0].value + "&" + first[1].id + "=" + first[1].value + "&" + first[2].id + "=" + encodeURIComponent(first[2].value) + "&";' +
-
-
-            'let second = document.querySelector("#ctl01 > div:nth-child(4)").getElementsByTagName("input");' +
-
-            'form = form + second[0].id + "=" + encodeURIComponent(second[0].value) + "&ctl00%24MainContent%24msisdn="+phone+"&ctl00%24MainContent%24submit_button=T%C3%ACm+ki%E1%BA%BFm";' +
-
-            'let formData = new FormData();' +
-            'formData.append("", form);' +
-            'fetch("https://10.156.0.19/Account/Subs_info_120days.aspx", {' +
-            'method: "POST",' +
-            'headers: {' +
-            '"Content-Type": "application/x-www-form-urlencoded",' +
-            '},' +
-            'body: formData,' +
-            '})' +
-            '.then(response => { return response.text(); })' +
-            '.then(data => {' +
-            'resolve(data);' +
-            '})' +
-            '.catch((error) => {' +
-            'console.log("fetch eror",error);' +
-            'reject(error);' +
-            '});' +
-
-            '}catch (e) {' +
-            'console.log("try catch above",e);' +
-            'reject(e);' +
-            '}' +
-            '});' +
-            '}' +
-            'try {' +
-            'let resultt = await get();' +
-            'return resultt;' +
-            '} catch (e) {' +
-            'return null;' +
-            '}' +
-            '};' +
-
-            'return await action()' +
-            '}';
-
-        await driver.evaluate(stringF);
-
 
     } catch (e) {
         console.log("Login Error", e);

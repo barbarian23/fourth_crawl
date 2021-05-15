@@ -18,7 +18,7 @@ import {
     SOCKET_LOG
 } from "../../../common/constants/common.constants";
 import doLogin from "../work/login.controller";
-import { HOME_URL, WAIT_TIME } from "../../constants/work/work.constants";
+import { HOME_URL, WAIT_TIME, MAXIMUM_INTERVAL } from "../../constants/work/work.constants";
 import { getListTdTag, getListMiddleNumber, getListNumberMoney, verifyNumberPhone } from "../../service/util/utils.server";
 
 const puppeteer = require('puppeteer');
@@ -26,6 +26,10 @@ const puppeteer = require('puppeteer');
 //C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe
 let exPath = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe";
 var driver;
+
+//biến đếm số lần chạy interval, nếu số lần chạy interval quá lướn, có thể khiến trình duyệt bị điw
+
+var countInterval = 0, clearIntervalMax = null;
 
 //selenium
 // const webdriver = require('selenium-webdriver');
@@ -78,11 +82,12 @@ try {
 
 const preparePuppteer = function () {
     return new Promise((res, rej) => {
-        puppeteer.launch({ 
-            args: ["--no-sandbox", "--proxy-server='direct://'", '--proxy-bypass-list=*'], 
-            headless: false, 
-            ignoreHTTPSErrors: true, 
-            executablePath: exPath == "" ? "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe" : exPath })
+        puppeteer.launch({
+            args: ["--no-sandbox", "--proxy-server='direct://'", '--proxy-bypass-list=*'],
+            headless: false,
+            ignoreHTTPSErrors: true,
+            executablePath: exPath == "" ? "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe" : exPath
+        })
             .then(async (browser) => {
                 let pageLogin = await browser.newPage();
                 pageLogin.setViewport({ width: 2600, height: 3800 });
@@ -95,13 +100,26 @@ const preparePuppteer = function () {
     });
 }
 
+const removeIntervalForLightenWeb = async () => {
+    //cứ 2 phút 1 lần sẽ xem có bao nhiêu interval  đang chạy, nếu nhiều quá, hơn 300 thì refresh lại trangm rồi injejct hàm getPhone lại
+    clearIntervalMax = setInterval(async () => {
+        if (countInterval > MAXIMUM_INTERVAL) {
+            // tải lại trang
+            await driver.goto(HOME_URL);
+
+            // wait to complete
+            await driver.waitForFunction('document.readyState === "complete"');
+
+            //inject hàm getPhone
+            await inJectGetPhone();
+
+        }
+    }, WAIT_TIME * 2 + 15000); // sẽ là 2 phút 15 giây
+}
+
 const workingController = async function (server) {
     try {
         driver = await preparePuppteer();
-
-
-
-
         //khoi tao socket 
         socket = socketServer(server);
         socket.receive((receive) => {
@@ -109,6 +127,7 @@ const workingController = async function (server) {
             receive.on(SOCKET_LOGIN, login);
 
             //get list phone
+            //trả về cho client danh sashc số đã lưu, đồng thời inject hàm getPhone vào trang web
             receive.on(SOCKET_GET_LIST_PHONE, getListPhone);
 
             // add number
@@ -233,16 +252,16 @@ const getNumberInfo = async (phone) => {
         try {
             //lấy ra đoạn html
             let htmlContent = await watchPhone(phone);
-            console.log("htmlContent", htmlContent.length);
+            //console.log("htmlContent", htmlContent.length);
             //lấy ra các tr
             let listTr = await getListTrInTable(htmlContent);
-            console.log("listTr", listTr.length);
+            //console.log("listTr", listTr.length);
             //lấy ra số điện thoại, có thể bao gồm với các ngoặc ><. dùng tr thứ 5
             let numberSpecial = await getMiddleNumber(listTr[5]);
-            console.log("numberSpecial", numberSpecial[0]);
+            //console.log("numberSpecial", numberSpecial[0]);
             //lấy ra number
             let number = await getNumberMoney(numberSpecial[0]);
-            console.log("number", number[0]);
+            console.log("phone", phone, "money", number[0]);
 
             res(number[0]);
 
@@ -258,13 +277,71 @@ let random = () => {
     return rd;
 }
 
+const inJectGetPhone = async () => {
+    try{
+    let stringF = 'window.getPhone = async (phone) => {' +
+            'console.log(phone);' +
+            'async function action(){' +
+            'function get(){' +
+            'return new Promise((resolve,reject)=>{' +
+            'try{' +
+            'let first = document.querySelector("#ctl01 > div:nth-child(1)").getElementsByTagName("input");' +
+
+            'let form = first[0].id + "=" + first[0].value + "&" + first[1].id + "=" + first[1].value + "&" + first[2].id + "=" + encodeURIComponent(first[2].value) + "&";' +
+
+
+            'let second = document.querySelector("#ctl01 > div:nth-child(4)").getElementsByTagName("input");' +
+
+            'form = form + second[0].id + "=" + encodeURIComponent(second[0].value) + "&ctl00%24MainContent%24msisdn="+phone+"&ctl00%24MainContent%24submit_button=T%C3%ACm+ki%E1%BA%BFm";' +
+
+            'let formData = new FormData();' +
+            'formData.append("", form);' +
+            'fetch("https://10.156.0.19/Account/Subs_info_120days.aspx", {' +
+            'method: "POST",' +
+            'headers: {' +
+            '"Content-Type": "application/x-www-form-urlencoded",' +
+            '},' +
+            'body: formData,' +
+            '})' +
+            '.then(response => { return response.text(); })' +
+            '.then(data => {' +
+            'resolve(data);' +
+            '})' +
+            '.catch((error) => {' +
+            'console.log("fetch eror",error);' +
+            'reject(error);' +
+            '});' +
+
+            '}catch (e) {' +
+            'console.log("try catch above",e);' +
+            'reject(e);' +
+            '}' +
+            '});' +
+            '}' +
+            'try {' +
+            'let resultt = await get();' +
+            'return resultt;' +
+            '} catch (e) {' +
+            'return null;' +
+            '}' +
+            '};' +
+
+            'return await action()' +
+            '}';
+
+        await driver.evaluate(stringF);
+    }catch(e){
+        console.log("inject getPhone error",e);
+    }
+}
+
 const login = function (data) {
     console.log("login voi username va password", data.username, data.password);
     doLogin(data.username, data.password, socket, driver);
 }
 
-const getListPhone = function (data) {
-    console.log("getListPhone", data);
+const getListPhone = async function (data) {
+    //console.log("getListPhone", data);
     socket.send(SOCKET_LIST_PHONE, arrayNumber);
 }
 
@@ -294,9 +371,9 @@ const addNumber = async function (data) {
     if (duplicateNumber(data.phone) == false) {
         // console.log("verifyNumberPhone data.phone", verifyNumberPhone(data.phone));
         data.phone = verifyNumberPhone(data.phone);
-        console.log("data.phone", data.phone);
+        //console.log("data.phone", data.phone);
         arrayNumber.push(data);
-        console.log("theem soos", arrayNumber[arrayNumber.length - 1]);
+        //console.log("theem soos", arrayNumber[arrayNumber.length - 1]);
         let tempIndex = arrayNumber.length - 1; // 3
         // console.log()
         socket.send(SOCKET_WORKING_ADDED_NUMBER, { status: 200, data: data });
@@ -308,12 +385,13 @@ const addNumber = async function (data) {
         arrayNumber[tempIndex].interval = setInterval(async () => { // xoa 3 >> clear interval 3
             //lúc thêm mới thì cần thận với cái arrayNumber.length này
             let idx = findIndex(data.phone);
-            console.log("interval new", idx, arrayNumber[idx].phone);
+            //console.log("interval new", idx, arrayNumber[idx].phone);
             //arrayNumber[idx].info = await getNumberInfo();
+            countInterval++;
             arrayNumber[idx].info = await getNumberInfo(arrayNumber[idx].phone);
             await socket.send(SOCKET_SETINTERVALED_PHONE, { info: arrayNumber[idx].info, index: idx, phone: data.phone });
         }, WAIT_TIME + tempIndex);
-        //csvInstance.writeFile(arrayNumber);
+        csvInstance.writeFile(arrayNumber);
     } else {
         socket.send(SOCKET_WORKING_ADDED_NUMBER, { status: "Số điện thoại đã tồn tại", data: null });
     }
@@ -321,7 +399,7 @@ const addNumber = async function (data) {
 }
 
 const addSomeNumber = function (data) {
-    console.log("theem nhieu soos", data);
+    //console.log("theem nhieu soos", data);
     //kiểm tra có bị trùng
     arrayNumber.push(data);
     socket.send(SOCKET_WORKING_ADDED_SOME_NUMBER, data);
@@ -344,17 +422,22 @@ const editPhone = function (data) {
 }
 
 
-//hàm này chạy đầu tiên, nên hàm này sẽ 
+//hàm này chạy đầu tiên, nên hàm này sẽ inject hàm getPhone vào trang web, và khởi tạo một interval chuyên dọn dẹp các interval để giảm thiêu dung lượn cho trang web
 const setIntervalPhone = async function (data) {
     try {
+        await inJectGetPhone();
+
+        await removeIntervalForLightenWeb();
+
         await socket.send(SOCKET_LOG, { message: "setIntervalPhone" });
-        console.log("data in server", arrayNumber);
+        //console.log("data in server", arrayNumber);
         arrayNumber.forEach(async (item, index) => {
             item.info = await getNumberInfo(item.phone);
             await socket.send(SOCKET_SETINTERVALED_PHONE, { info: item.info, index: index, phone: item.phone });
 
             item.interval = setInterval(async () => {
                 //item.info = await getNumberInfo();
+                countInterval++;
                 item.info = await getNumberInfo(item.phone);
                 let idx = findIndex(item.phone);
                 await socket.send(SOCKET_SETINTERVALED_PHONE, { info: item.info, index: idx, phone: item.phone });
