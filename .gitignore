@@ -1,4 +1,5 @@
 node_modules/
-dist/
+fourth/dist/
+fourth/node_modules/
 package-lock.json
-.cookies/
+release-builds
