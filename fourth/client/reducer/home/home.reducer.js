@@ -10,7 +10,8 @@ import {
     EDIT_PHONE_SUCCESS,
     SET_INTERVAL_PHONE,
     SET_INTERVAL_PHONE_SUCCESS,
-    ADD_PHONE_FAIL} from '../../action/home/home.action';
+    ADD_PHONE_FAIL,
+    SEARCH_PHONE} from '../../action/home/home.action';
 
 const initialState = {
     something: undefined,
@@ -22,6 +23,7 @@ const initialState = {
         info:""
     },
     warning:"",
+    searchPhone:"",
 };
 
 const mapKey = new Map([
@@ -107,6 +109,11 @@ export default function homeReducer(state = initialState, action) {
             return{
                 ...state,
                 listPhone: [...tempPhone],
+            }
+        case SEARCH_PHONE:
+            return{
+                ...state,
+                searchPhone: action.data // index cua phone
             }
         default:
             return{

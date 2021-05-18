@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import '../../assets/css/home/home.css';
 import { TH_STT, TH_PHONE, TH_MONEY, TH_INFO, TH_TRACK, TR_TYPE_NUMBER, TR_TYPE_MONEY, TR_TYPE_ADD, sampleData } from "../../constants/home/home.constant";
-import { ADD_PHONE, GET_LIST_PHONE, SET_INTERVAL_PHONE } from "../../action/home/home.action";
+import { ADD_PHONE, GET_LIST_PHONE, SEARCH_PHONE, SET_INTERVAL_PHONE } from "../../action/home/home.action";
 import { readFileExcel, createFileExcel } from "../../service/excel/excel.client.service";
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -60,11 +60,29 @@ export default function Home() {
     let onInputMoney = (e) => {
         setMoney(e.target.value);
     }
-
-    const inputSearch = useRef(null);
-    // useEffect(()=>{},[inputSearch]);
+  
     let onInputSearch = (e) => {
-        inputSearch.current.focus();
+        if(e.target.value == ""){
+            dispatch({
+                type: SEARCH_PHONE,
+                data: -1
+                }
+            )
+        }else{
+            if(listPhone){
+                listPhone.forEach((element,index) => {
+                    console.log("element is",element);
+                    if(element.phone.includes(e.target.value)){
+                        console.log("found",index);
+                        dispatch({
+                            type: SEARCH_PHONE,
+                            data: index,
+                        })
+                        //inputSearch.current.focus();
+                    }
+                });
+            }   
+        } 
     }
 
     let addNew = () => {
@@ -73,9 +91,10 @@ export default function Home() {
 
     return (
         <div className="crawl-login" id="div_craw">
-            {/* <div className="input-add-div">
-            <input className="input-add" type="text" placeholder="Nhập số cần tìm" onChange={onInputSearch} />
-            </div> */}
+            <div className="input-add-div">
+            <input className="input-add" 
+                                    type="text" placeholder="Nhập số cần tìm" onChange={onInputSearch} />
+            </div>
             <div className="crawl-login-crawl">
                 <table>
                     <tbody>
