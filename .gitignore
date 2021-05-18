@@ -3,3 +3,4 @@ fourth/dist/
 fourth/node_modules/
 package-lock.json
 release-builds
+dist

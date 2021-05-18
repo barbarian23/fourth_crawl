@@ -8,6 +8,7 @@ export default function Row(props) {
 
     const {index, data} = props;
     const {phone , money, info } = data;
+    const audio = new Audio('../../assets/images/sound_noti.mp3');
     let dispatch = useDispatch();
     let dispatchToStore = (action) => {
         dispatch(action);
@@ -21,6 +22,9 @@ export default function Row(props) {
     //số điện thoại
     let [newPhone, setNewPhone] = useState(phone);
     let [newMoney, setNewMoney] = useState(money);
+
+    // sound noti
+    let [playSoundNoti, setPlaySoundNoti] = useState(false);
 
     let editPhone = () => {
         isEdited ? setEdited(false) : setEdited(true);
@@ -42,13 +46,20 @@ export default function Row(props) {
             setNewMoney(money);
     }
 
+    let playSound = (e) => {
+        if(e >= Number.parseFloat(data.money)){
+            audio.play();
+        } else 
+            audio.pause();
+    }
+
     if (!isEdited){
         return (
             <tr style={{backgroundColor: (Number.parseFloat(data.info) >= Number.parseFloat(data.money))?"#00FF00":"#FFFFFF"}} key={index}>
                 <td>{index + 1}</td>
                 <td>{phone}</td>
                 <td>{money}</td>   
-                <td>{Number.parseFloat(info)  == -1 ? "Lỗi số" : info}</td>             
+                <td>{Number.parseFloat(info)  == -1 ? "Đang cập nhật" : info}{playSound(Number.parseFloat(data.info))}</td>             
                 <td>
                     <div className="btn edit" onClick={editPhone}>{TH_EDIT}</div>
                     <div className="btn delete" onClick={()=>dispatchToStore({type: DELETE_PHONE, data:{index: index, phone: phone, money: money, info: info}})}>{TH_DELETE}</div>
@@ -61,7 +72,7 @@ export default function Row(props) {
                 <td>{index + 1}</td>
                 <td><input type="text" placeholder="Nhập số điện thoại" onChange={onChangePhone} defaultValue={phone}/></td>
                 <td><input type="text" placeholder="Nhập số tiền" onChange={onChangeMoney} defaultValue={money}/></td>
-                <td style={{backgroundColor: (Number.parseFloat(data.info) >= Number.parseFloat(data.money))?"#00FF00":"#FFFFFF"}}>{Number.parseFloat(info)  == -1 ? "Lỗi số" : info}</td> 
+                <td style={{backgroundColor: (Number.parseFloat(data.info) >= Number.parseFloat(data.money))?"#00FF00":"#FFFFFF"}}>{Number.parseFloat(info)  == -1 ? "Đang cập nhật" : info}</td> 
                 <td>
                     <div className="done" 
                          onClick={()=>{

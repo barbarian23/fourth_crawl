@@ -2,7 +2,7 @@
 
 
 function csvService() {
-    const csvFilePath = './fourth/server/data/data.csv';
+    const csvFilePath = './server/data/data.csv';
 
     function readFile() {
         const csv = require('csv-parser');
