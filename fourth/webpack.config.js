@@ -35,12 +35,25 @@ const css = {
 };
 
 const file = {
-    test: /\.(png|jpg|gif)$/i,
+    // test: /\.png|jpg|gif|mp3/,
+    // use: [
+    //     {
+    //         loader: 'url-loader',
+    //         options: {
+    //             name: "[name].[ext]"
+    //           },
+    //     },
+    // ],
+    test: /\.(png|jpg|gif|mp3)$/i,
     use: [
         {
-            loader: 'file-loader',
+            loader: 'url-loader',
+            options: {
+                name: "[name].[ext]"
+            },
         },
     ],
+    //use: 'file-loader',
 };
 
 

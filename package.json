@@ -20,5 +20,6 @@
     "node": "^15.4.0",
     "request": "^2.88.2",
     "strip": "^3.0.0"
-  }
+  },
+  "devDependencies": {}
 }
