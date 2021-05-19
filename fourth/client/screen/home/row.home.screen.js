@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DELETE_PHONE, EDIT_PHONE, SET_INTERVAL_PHONE } from "../../action/home/home.action";
+import { DELETE_PHONE, EDIT_PHONE, NOTI_PHONE, SET_INTERVAL_PHONE } from "../../action/home/home.action";
 import '../../assets/css/home/row.css';
 import mp3 from '../../assets/sound/noti.mp3';
 import { TH_EDIT, TH_DELETE, TH_DONE } from "../../constants/home/home.constant";
@@ -34,6 +34,17 @@ export default function Row(props) {
         //nếu không phải -1 , không phải lỗi
         else{
             setCurrentInfo(info);
+            if(Number.parseFloat(info) >= Number.parseFloat(money)){
+                dispatch({
+                    type: NOTI_PHONE,
+                    data: {
+                        phone:phone,
+                        money: money,
+                        info: info,
+                    }
+                })
+            }
+            
         }
     }, [info]);
 

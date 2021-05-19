@@ -17,6 +17,7 @@ export default function Home() {
 
     let listPhone = useSelector(state => state.home.listPhone);
     let warning = useSelector(state => state.home.warning);
+    let notiPhone = useSelector(state => state.home.notiPhone);
 
     useEffect(() => {
         console.log("current list phone", listPhone);
@@ -151,6 +152,15 @@ export default function Home() {
                     <img id="img_file_input" src='../assets/images/file.png' />
                     <label htmlFor="avatar">Bấm vào đây để tải tệp(excel) mẫu</label>
                 </div>
+                {
+                    notiPhone ?
+                    notiPhone.map((item, index) => {
+                        // console.log(index, item);
+                        return <text>Tài khoản chính thuê bao {item.phone} là {item.info} (lớn hơn {item.money})</text>   
+                    })
+                    :
+                    null
+                }
 
                 <div className="crawl-loading-parent" id="div_login_loading">
                     <div className="crawl-login-loading">

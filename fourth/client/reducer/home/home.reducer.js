@@ -11,7 +11,8 @@ import {
     SET_INTERVAL_PHONE,
     SET_INTERVAL_PHONE_SUCCESS,
     ADD_PHONE_FAIL,
-    SEARCH_PHONE} from '../../action/home/home.action';
+    SEARCH_PHONE,
+    NOTI_PHONE} from '../../action/home/home.action';
 
 const initialState = {
     something: undefined,
@@ -24,6 +25,7 @@ const initialState = {
     },
     warning:"",
     searchPhone:"",
+    notiPhone:[],
 };
 
 const mapKey = new Map([
@@ -114,6 +116,14 @@ export default function homeReducer(state = initialState, action) {
             return{
                 ...state,
                 searchPhone: action.data // index cua phone
+            }
+        case NOTI_PHONE:
+            console.log("noti phone", action.data);
+            let tempNotiPhone = [...state.notiPhone];
+            tempNotiPhone.unshift(action.data);
+            return{
+                ...state,
+                notiPhone: [...tempNotiPhone],
             }
         default:
             return{

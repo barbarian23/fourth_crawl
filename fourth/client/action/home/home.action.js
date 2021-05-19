@@ -20,4 +20,5 @@ export const SET_INTERVAL_PHONE_SUCCESS = "SET_INTERVAL_PHONE_SUCCESS";
 export const CHANGE_MONEY = "change-money";
 
 export const SEARCH_PHONE = "SEARCH_PHONE";
+export const NOTI_PHONE = "NOTI_PHONE";
 
