@@ -85,7 +85,6 @@ input :hover{
 .crawl-login-success-contain {
     display: flex;
     width: 90%;
-    height: 90%;
     flex-direction: column;
     justify-content: center;
     align-items: center;

@@ -9,8 +9,8 @@ import Row from './row.home.screen';
 import { validatePhonenumber } from "../../service/util/utils.client";
 
 export default function Home() {
-    const [phone, setPhone ] = useState("");
-    const [ money, setMoney ] = useState(0);
+    const [phone, setPhone] = useState("");
+    const [money, setMoney] = useState(0);
     const [warningPhone, setWarningPhone] = useState("");
 
     const dispatch = useDispatch();
@@ -21,23 +21,23 @@ export default function Home() {
 
     useEffect(() => {
         console.log("current list phone", listPhone);
-        if(listPhone.length === 0){
+        if (listPhone.length === 0) {
             dispatch({ type: GET_LIST_PHONE, data: null });
         }
         // khoi tao interval - duy nhat 1 lan
-        dispatch({type: SET_INTERVAL_PHONE});
+        dispatch({ type: SET_INTERVAL_PHONE });
     }, []);
-    
+
     let readFile = (e) => {
         readFileExcel(e.target.files[0], (data) => {
             //data là mảng chứa danh sách thuê bao và số tiền
             data.forEach((item, index) => {
                 //Bỏ qua dòng đầu vì là tiêu đề
-                
+
                 if (index > 0) {
                     console.log("data in file excel", item);
                     // useDispatch({ type: ADD_PHONE, value: item });
-                    dispatch({type: ADD_PHONE, data: { phone: item[0], money: item[1]}});
+                    dispatch({ type: ADD_PHONE, data: { phone: item[0], money: item[1] } });
                 }
             });
         });
@@ -52,7 +52,7 @@ export default function Home() {
 
     let onInputPhone = (e) => {
         setPhone(e.target.value);
-        if(!validatePhonenumber(phone))
+        if (!validatePhonenumber(phone))
             setWarningPhone("Số điện thoại không hợp lệ");
         else
             setWarningPhone("");
@@ -61,20 +61,20 @@ export default function Home() {
     let onInputMoney = (e) => {
         setMoney(e.target.value);
     }
-  
+
     let onInputSearch = (e) => {
-        if(e.target.value == ""){
+        if (e.target.value == "") {
             dispatch({
                 type: SEARCH_PHONE,
                 data: -1
-                }
+            }
             )
-        }else{
-            if(listPhone){
-                listPhone.forEach((element,index) => {
-                    console.log("element is",element);
-                    if(element.phone.includes(e.target.value)){
-                        console.log("found",index);
+        } else {
+            if (listPhone) {
+                listPhone.forEach((element, index) => {
+                    console.log("element is", element);
+                    if (element.phone.includes(e.target.value)) {
+                        console.log("found", index);
                         dispatch({
                             type: SEARCH_PHONE,
                             data: index,
@@ -82,8 +82,8 @@ export default function Home() {
                         //inputSearch.current.focus();
                     }
                 });
-            }   
-        } 
+            }
+        }
     }
 
     let addNew = () => {
@@ -93,8 +93,8 @@ export default function Home() {
     return (
         <div className="crawl-login" id="div_craw">
             <div className="input-add-div">
-            <input className="input-add" 
-                                    type="text" placeholder="Nhập số cần tìm" onChange={onInputSearch} />
+                <input className="input-add"
+                    type="text" placeholder="Nhập số cần tìm" onChange={onInputSearch} />
             </div>
             <div className="crawl-login-crawl">
                 <table>
@@ -107,40 +107,40 @@ export default function Home() {
                             <th>{TH_TRACK}</th>
                         </tr>
                         {
-                            listPhone 
-                            ? listPhone.map((item, index) => {
-                                // console.log(index, item);
-                                return <Row key={index}
-                                    data={item}
-                                    index={index}
-                                />
-                            })
-                            : null
+                            listPhone
+                                ? listPhone.map((item, index) => {
+                                    // console.log(index, item);
+                                    return <Row key={index}
+                                        data={item}
+                                        index={index}
+                                    />
+                                })
+                                : null
                         }
                     </tbody>
                 </table>
 
                 <div className="divTextStatus"></div>
-                
+
                 <div className="input-add-div">
-                    <input className="input-add" 
-                        type="text" 
-                        placeholder={TR_TYPE_NUMBER} 
+                    <input className="input-add"
+                        type="text"
+                        placeholder={TR_TYPE_NUMBER}
                         onChange={onInputPhone}
-                        />
+                    />
                     <input className="input-add" type="text" placeholder={TR_TYPE_MONEY} onChange={onInputMoney} />
                     <input className="input-add-button" type="button" value={TR_TYPE_ADD} onClick={addNew} />
                     {
                         warning == "" ?
-                        <div>{warningPhone}</div>
-                        :
-                        <div>{warning}</div>
+                            <div>{warningPhone}</div>
+                            :
+                            <div>{warning}</div>
                     }
                 </div>
                 <div>
-                </div>    
+                </div>
                 <div id="crawl_login_file_input_up">
-                    <img id="img_file_input" src='../assets/images/file.png' />
+                    {/* <img id="img_file_input" src='../assets/images/file.png' /> */}
                     <label htmlFor="xlsx">Bấm vào đây để chọn tệp(excel)</label>
                     <input type="file"
                         id="xlsx" name="xlsx"
@@ -149,29 +149,26 @@ export default function Home() {
                 </div>
 
                 <div id="crawl_login_file_input_down" onClick={downloadFile} >
-                    <img id="img_file_input" src='../assets/images/file.png' />
+                    {/* <img id="img_file_input" src='../assets/images/file.png' /> */}
                     <label htmlFor="avatar">Bấm vào đây để tải tệp(excel) mẫu</label>
                 </div>
                 {
-                    notiPhone ?
-                    notiPhone.map((item, index) => {
-                        // console.log(index, item);
-                        return <text>Tài khoản chính thuê bao {item.phone} là {item.info} (lớn hơn {item.money})</text>   
-                    })
-                    :
-                    null
+                    notiPhone && notiPhone.length > 0 ?
+                        <div className="div-noti-phone-parent">
+                            <span id="span-noti-phone">Thay đổi mới nhất</span>
+                            <div className="div-noti-phone">{
+                                notiPhone.map((item, index) => {
+                                    console.log(index, item);
+                                    return <text>Tài khoản chính của thuê bao <span className="noti-item-phone">{item.phone}</span> là <span className="noti-item-">{item.info}</span> (lớn hơn {item.money})</text>
+                                })
+                            }
+                            </div>
+                        </div>
+                        :
+                        null
                 }
 
-                <div className="crawl-loading-parent" id="div_login_loading">
-                    <div className="crawl-login-loading">
-                        <div className="circle"></div>
-                        <div className="circle"></div>
-                        <div className="circle"></div>
-                        <div className="shadow"></div>
-                        <div className="shadow"></div>
-                        <div className="shadow"></div>
-                    </div>
-                </div>
+                
                 <div className="div-progress-bar" id="div_progress_bar">
                     <div id="div_grey"></div>
                 </div>
