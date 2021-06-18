@@ -78,7 +78,7 @@ async function doLogin(username, password, socket, driver) {
         //     window.getPhone = (phone) => {
         //         console.log("phone is", phone);
         //         let get = () => {
-        //             return new Promise((resolve, reject) => {
+        //             return new Promise((rvcesolve, reject) => {
         //                 try {
         //                     let first = document.querySelector("#ctl01 > div:nth-child(1)").getElementsByTagName("input");
 

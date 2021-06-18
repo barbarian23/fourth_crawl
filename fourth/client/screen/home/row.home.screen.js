@@ -112,6 +112,7 @@ export default function Row(props) {
 
     useEffect(() => {
         if (Number.parseFloat(data.info) >= Number.parseFloat(data.money)){
+            console.log("play sound with phone ",phone,"canh bao",info,"tien hien tai",money);
             playSound();
         }
     }, [data.info]);
