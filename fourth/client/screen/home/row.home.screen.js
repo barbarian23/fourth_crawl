@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { DELETE_PHONE, EDIT_PHONE, NOTI_PHONE, SET_INTERVAL_PHONE } from "../../action/home/home.action";
 import '../../assets/css/home/row.css';
 import mp3 from '../../assets/sound/noti.mp3';
-import { TH_EDIT, TH_DELETE, TH_DONE } from "../../constants/home/home.constant";
-
+import { TH_EDIT, TH_DELETE, TH_DONE, URL_BOT_TELEGRAM } from "../../constants/home/home.constant";
+import { requestPost } from "../../service/request/request";
 
 export default function Row(props) {
     const { index, data } = props;
@@ -31,7 +31,7 @@ export default function Row(props) {
                 setCurrentInfo(prevInfo);
             }
         }
-        if(info == null){
+        if (info == null) {
             setCurrentInfo("Bị lỗi số");
         }
         //nếu không phải -1 , không phải lỗi
@@ -113,10 +113,23 @@ export default function Row(props) {
         audio.play()
     }
 
+    let sendTelegram = (data) => {
+        requestPost(URL_BOT_TELEGRAM,
+            {
+                chat_id: "@moneynotibot",
+                text: "Tài khoản chính của thuê bao " + data.phone + " là " + data.info + " (lớn hơn " + data.money + ")",
+            })
+            .then((res) => {
+                console.log("send telegram successfully ", res);
+            })
+            .catch((err) => {
+                console.log("send telegram failure ", err);
+            });
+    }
     useEffect(() => {
         if (Number.parseFloat(data.info) >= Number.parseFloat(data.money)) {
-            console.log("play sound with phone ", phone, "canh bao", info, "tien hien tai", money);
-            playSound();
+            // playSound();
+            sendTelegram(data);
         }
     }, [data.info]);
 

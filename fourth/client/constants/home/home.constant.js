@@ -17,6 +17,8 @@ export const TR_TYPE_NUMBER = "Nhập số điện thoại";
 export const TR_TYPE_MONEY = "Nhập số tiền";
 export const TR_TYPE_ADD = "Thêm";
 
+export const URL_BOT_TELEGRAM = "https://api.telegram.org/bot1867207232:AAE7nPQ6VCGpzxqpmpyCxMj6YrjClUugd34/sendMessage";
+
 export const sampleData = [
     {
         "Số thuê bao": "0944854975",
