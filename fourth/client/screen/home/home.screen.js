@@ -158,7 +158,7 @@ export default function Home() {
                             <span id="span-noti-phone">Thay đổi mới nhất</span>
                             <div className="div-noti-phone">{
                                 notiPhone.map((item, index) => {
-                                    console.log("thay doi moi nhat",index, item);
+                                    //console.log("thay doi moi nhat",index, item);
                                     return <text>Tài khoản chính của thuê bao <span className="noti-item-phone">{item.phone}</span> là <span className="noti-item-">{item.info}</span> (lớn hơn {item.money})</text>
                                 })
                             }

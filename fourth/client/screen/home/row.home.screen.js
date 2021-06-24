@@ -19,32 +19,35 @@ export default function Row(props) {
     //check giá trị khi info thay đổi
     useEffect(() => {
         //nếu là -1 , có lẽ lỗi mạng cmnr
-
-        if(Number.parseFloat(info) == -1){
+        //console.log("phone", phone, "new info", info);
+        if (Number.parseFloat(info) == -1) {
             //không có giá trị trước của prevInffo - lần đậ chạy àm lỗi mạng
-            
-            if(prevInfo == null || prevInfo == ""){
+
+            if (prevInfo == null || prevInfo == "") {
                 setCurrentInfo("Bị lỗi số");
-            } 
+            }
             //thì set lại gái trị cuối cùng vừa nhận được
             else {
                 setCurrentInfo(prevInfo);
             }
         }
+        if(info == null){
+            setCurrentInfo("Bị lỗi số");
+        }
         //nếu không phải -1 , không phải lỗi
-        else{
+        else {
             setCurrentInfo(info);
-            if(Number.parseFloat(info) >= Number.parseFloat(money)){
+            if (Number.parseFloat(info) >= Number.parseFloat(money)) {
                 dispatch({
                     type: NOTI_PHONE,
                     data: {
-                        phone:phone,
+                        phone: phone,
                         money: money,
                         info: info,
                     }
                 })
             }
-            
+
         }
     }, [info]);
 
@@ -107,12 +110,12 @@ export default function Row(props) {
     }
 
     let playSound = () => {
-        audio.play() 
+        audio.play()
     }
 
     useEffect(() => {
-        if (Number.parseFloat(data.info) >= Number.parseFloat(data.money)){
-            console.log("play sound with phone ",phone,"canh bao",info,"tien hien tai",money);
+        if (Number.parseFloat(data.info) >= Number.parseFloat(data.money)) {
+            console.log("play sound with phone ", phone, "canh bao", info, "tien hien tai", money);
             playSound();
         }
     }, [data.info]);
@@ -123,7 +126,7 @@ export default function Row(props) {
                 <td>{index + 1}</td>
                 <td ref={makeColor} >{phone}</td>
                 <td>{money}</td>
-                <td>{currentInfo}
+                <td>{currentInfo + " - " + info}
                     {/* {playSound(Number.parseFloat(data.info))} */}
                 </td>
                 <td>
@@ -159,7 +162,7 @@ export default function Row(props) {
 function usePrevious(value) {
     const ref = useRef();
     useEffect(() => {
-      ref.current = value;
+        ref.current = value;
     });
     return ref.current;
-  }
+}

@@ -31,7 +31,7 @@ export const getListNumberMoney = paragraph => {
 export const verifyNumberPhone = paragraph => {
     try {
         var regex = /[^0][\d]+/g;
-        return paragraph.match(regex) + "";
+        return paragraph.match(regex);
     } catch (e) {
         console.log("verifyNumberPhone error",e);
         return [""];

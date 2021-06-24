@@ -12,43 +12,44 @@ import {
     SET_INTERVAL_PHONE_SUCCESS,
     ADD_PHONE_FAIL,
     SEARCH_PHONE,
-    NOTI_PHONE} from '../../action/home/home.action';
+    NOTI_PHONE
+} from '../../action/home/home.action';
 
 const initialState = {
     something: undefined,
-    listPhone:[],
-    phoneNumber:{
-        index:"",
-        phone:"",
-        money:"",
-        info:""
+    listPhone: [],
+    phoneNumber: {
+        index: "",
+        phone: "",
+        money: "",
+        info: ""
     },
-    warning:"",
-    searchPhone:"",
-    notiPhone:[],
+    warning: "",
+    searchPhone: "",
+    notiPhone: [],
 };
 
 const mapKey = new Map([
-    ["1",()=>{}],
-    ["2",()=>{}]
+    ["1", () => { }],
+    ["2", () => { }]
 ]);
 
 export default function homeReducer(state = initialState, action) {
     // console.log("[homeReducers " + action.type + "]", action.value);
 
-    switch(action.type){
+    switch (action.type) {
         case GET_LIST_PHONE_SUCCESS:
-            return{
+            return {
                 ...state,
                 listPhone: action.value,
             }
         case GET_LIST_PHONE_FAIL:
-            return{
+            return {
                 ...state,
                 listPhone: [],
             }
         case ADD_PHONE_SUCCESS:
-            return{
+            return {
                 ...state,
                 listPhone: [
                     ...state.listPhone,
@@ -60,27 +61,27 @@ export default function homeReducer(state = initialState, action) {
                 warning: "",
             }
         case ADD_PHONE_FAIL:
-            return{
+            return {
                 ...state,
                 warning: action.value,
             }
         case DELETE_PHONE:
             console.log(" reducer delete phone ", action.data);
-            return{
+            return {
                 ...state,
                 phoneNumber: action.data,
             }
         case DELETE_PHONE_SUCCESS:
             console.log(" reducer after delete phone ", action.data)
             let tempDelPhone = [...state.listPhone];
-            tempDelPhone.splice(action.data.index,1);
-            return{
+            tempDelPhone.splice(action.data.index, 1);
+            return {
                 ...state,
                 listPhone: [...tempDelPhone],
             }
         case EDIT_PHONE:
             console.log(" reducer edit phone ", action.data);
-            return{
+            return {
                 ...state,
                 phoneNumber: action.data,
             }
@@ -89,14 +90,14 @@ export default function homeReducer(state = initialState, action) {
             let tempEditPhone = [...state.listPhone];
             tempEditPhone[action.data.index].phone = action.data.phone;
             tempEditPhone[action.data.index].money = action.data.money;
-            
-            return{
+
+            return {
                 ...state,
                 listPhone: [...tempEditPhone],
             }
         case SET_INTERVAL_PHONE:
             console.log("reducer set interval listphone", action.data);
-            return{
+            return {
                 ...state,
                 listPhone: action.data,
             }
@@ -105,15 +106,16 @@ export default function homeReducer(state = initialState, action) {
             // check null cho chac
             // co truong hop server k tra ve/ tra ve k kip data
             // console.log("tempPhone is ", tempPhone,);
-            if(action.data && tempPhone[action.data.index]){
+            // do có lỗi index bị truyền từ server xuống client sai, nên mình check xem action.data.data có bằng tempPhone[action.data.index].data không
+            if (action.data && tempPhone[action.data.index] && tempPhone[action.data.index].data == action.data.data) {
                 tempPhone[action.data.index].info = action.data.info;
             }
-            return{
+            return {
                 ...state,
                 listPhone: [...tempPhone],
             }
         case SEARCH_PHONE:
-            return{
+            return {
                 ...state,
                 searchPhone: action.data // index cua phone
             }
@@ -121,12 +123,12 @@ export default function homeReducer(state = initialState, action) {
             console.log("noti phone", action.data);
             let tempNotiPhone = [...state.notiPhone];
             tempNotiPhone.unshift(action.data);
-            return{
+            return {
                 ...state,
                 notiPhone: [...tempNotiPhone],
             }
         default:
-            return{
+            return {
                 ...state
             }
     }

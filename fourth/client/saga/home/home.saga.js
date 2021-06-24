@@ -205,7 +205,7 @@ const setIntervalPhone = function* (action){
    while(true){
        let responce = yield take(result);
        if(responce){
-           //console.log("respone", responce);
+           console.log("respone interval", responce);
            yield put({
                type: SET_INTERVAL_PHONE_SUCCESS,
                data: {
