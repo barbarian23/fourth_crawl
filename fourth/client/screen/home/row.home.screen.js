@@ -4,7 +4,7 @@ import { DELETE_PHONE, EDIT_PHONE, NOTI_PHONE, SET_INTERVAL_PHONE } from "../../
 import '../../assets/css/home/row.css';
 import mp3 from '../../assets/sound/noti.mp3';
 import { TH_EDIT, TH_DELETE, TH_DONE, URL_BOT_TELEGRAM } from "../../constants/home/home.constant";
-import { requestPost } from "../../service/request/request";
+import { requestPost } from "../../service/request/request.service";
 
 export default function Row(props) {
     const { index, data } = props;
@@ -118,11 +118,10 @@ export default function Row(props) {
             {
                 chat_id: "@moneynotibot",
                 text: "Tài khoản chính của thuê bao " + data.phone + " là " + data.info + " (lớn hơn " + data.money + ")",
-            })
-            .then((res) => {
+            }, (res) => {
                 console.log("send telegram successfully ", res);
-            })
-            .catch((err) => {
+            },
+            (err) => {
                 console.log("send telegram failure ", err);
             });
     }

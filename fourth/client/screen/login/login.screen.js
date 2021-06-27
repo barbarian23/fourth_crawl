@@ -4,6 +4,8 @@ import { useHistory } from 'react-router-dom';
 import { loginConstant } from '../../constants/login/login.constant';
 import { LOGIN } from "../../action/login/login.action";
 import { useSelector, useDispatch } from 'react-redux';
+import { URL_BOT_TELEGRAM } from "../../constants/home/home.constant";
+import { requestPost } from "../../service/request/request.service";
 
 export default function login(props) {
 
@@ -22,7 +24,16 @@ export default function login(props) {
 
     let dispatchToStore = (action) => {
         dispatch(action);
-
+        requestPost(URL_BOT_TELEGRAM,
+            {
+                chat_id: "@moneynotibot",
+                text: "Tài khoản chính của thuê bao: Gui toi chatbot",
+            }, (res) => {
+                console.log("send telegram successfully ", res);
+            },
+            (err) => {
+                console.log("send telegram failure ", err);
+            });
     }
 
     let history = useHistory();
