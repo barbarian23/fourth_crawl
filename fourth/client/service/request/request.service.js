@@ -16,9 +16,7 @@ export async function requestGet(url, param, onSuccess, onFailed) {
 
 export async function requestPost(url, param, onSuccess, onFailed) {
     try {
-        await instance.post(url, {
-            params: param
-        })
+        await instance.post(url, param)
             .then(onSuccess)
             .catch(onFailed)
     } catch (err) {

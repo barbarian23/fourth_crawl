@@ -24,16 +24,16 @@ export default function login(props) {
 
     let dispatchToStore = (action) => {
         dispatch(action);
-        requestPost(URL_BOT_TELEGRAM,
-            {
-                chat_id: "@moneynotibot",
-                text: "Tài khoản chính của thuê bao: Gui toi chatbot",
-            }, (res) => {
-                console.log("send telegram successfully ", res);
-            },
-            (err) => {
-                console.log("send telegram failure ", err);
-            });
+        // requestPost(URL_BOT_TELEGRAM,
+        //     {
+        //         chat_id: '@abcanh',
+        //         text: 'Tài khoản chính của thuê bao: Gui toi chatbot',
+        //     }, (res) => {
+        //         console.log("send telegram successfully ", res);
+        //     },
+        //     (err) => {
+        //         console.log("send telegram failure ", err);
+        //     });
     }
 
     let history = useHistory();

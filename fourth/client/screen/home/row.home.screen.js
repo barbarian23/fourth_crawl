@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { DELETE_PHONE, EDIT_PHONE, NOTI_PHONE, SET_INTERVAL_PHONE } from "../../action/home/home.action";
 import '../../assets/css/home/row.css';
 import mp3 from '../../assets/sound/noti.mp3';
-import { TH_EDIT, TH_DELETE, TH_DONE, URL_BOT_TELEGRAM } from "../../constants/home/home.constant";
+import { TH_EDIT, TH_DELETE, TH_DONE, URL_BOT_TELEGRAM, ID_CHANNEL_TELEGRAM } from "../../constants/home/home.constant";
 import { requestPost } from "../../service/request/request.service";
 
 export default function Row(props) {
@@ -116,7 +116,7 @@ export default function Row(props) {
     let sendTelegram = (data) => {
         requestPost(URL_BOT_TELEGRAM,
             {
-                chat_id: "@moneynotibot",
+                chat_id: ID_CHANNEL_TELEGRAM,
                 text: "Tài khoản chính của thuê bao " + data.phone + " là " + data.info + " (lớn hơn " + data.money + ")",
             }, (res) => {
                 console.log("send telegram successfully ", res);
