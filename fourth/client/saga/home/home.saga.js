@@ -27,14 +27,33 @@ import {
     SOCKET_WORKING_EDITED_PHONE,
     SOCKET_SETINTERVAL_PHONE,
     SOCKET_SETINTERVALED_PHONE,
-    SOCKET_LOG
+    SOCKET_LOG,
+    SOCKET_INTERVAL_ALL_PHONE_URL,
+    SOCKET_INTERVAL_EACH_PHONE_URL
 } from "../../../common/constants/common.constants";
-
+import sseClient from "../../service/sse/sse.client.service";
 const socket = new socketClient(MAIN_URL);
 
-// sử dụng eventChannel để gửi và nhận data qua socket
+// sử dụng eventChannel để gửi và nhận data qua socket haowjc seveer snet event
 const homeSocket = function (data) {
+    
+    //cái mới dùng server sent event
+    return eventChannel(emitter => {
+
+        let sseTest = sseClient(MAIN_URL + SOCKET_INTERVAL_EACH_PHONE_URL + "?phone=" + data.data.phone + "&money=" + data.data.money);
+        sseTest.connect((data) => {
+                data = data ? JSON.parse(data.data) : '';
+                emitter(data || '');
+        });
+
+        return () => {
+            //unscrible
+        };
+
+    });
+
     // console.log("homeSocket", data);
+    //cái cũ dùng socket
     return eventChannel(emitter => {
         //gửi
         socket.send(SOCKET_WORKING_SINGLE_NUMBER, { phone: data.data.phone, money: data.data.money });
@@ -80,6 +99,7 @@ const addNumberSaga = function* (action) {
 //get list phone socket
 const getListPhoneSocket = function (data) {
     // console.log("homeSocket", data);
+   
     return eventChannel(emitter => {
         //gửi
         socket.send(SOCKET_GET_LIST_PHONE, {});
@@ -185,6 +205,21 @@ const editPhone = function* (action){
 // 
 const setIntervalPhoneSocket = function(data){
     console.log("setinterval listphone socket", data.data);
+     //cái mới dùng server sent event
+     return eventChannel(emitter => {
+
+        let sseTest = sseClient(MAIN_URL + SOCKET_INTERVAL_ALL_PHONE_URL);
+        sseTest.connect((data) => {
+                data = data ? JSON.parse(data.data) : '';
+                emitter(data || '');
+        });
+
+        return () => {
+            //unscrible
+        };
+
+    });
+    //cái cũ dùng socket
    return eventChannel(emitter => {
        socket.send(SOCKET_SETINTERVAL_PHONE,{listPhone: data.data});
        socket.receive(SOCKET_SETINTERVALED_PHONE, function(data){

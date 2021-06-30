@@ -32,11 +32,11 @@ function sseServer(res) {
     });
 
     let sseInner = {
-        sendData: function (data) {
+        sendData: async function (data) {
             res.write('event: message\n');
             res.write(`data: ${JSON.stringify(data)}`);
             res.write("\n\n");
-            res.flush();
+            //res.flush();
         },
         close: function (fn,param) {
             res.on('close', ()=>{

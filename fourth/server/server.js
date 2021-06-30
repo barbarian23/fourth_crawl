@@ -3,7 +3,7 @@ import '@babel/polyfill';
 import express from "express";
 //import bodyParser from 'body-parser';
 import path from "path";
-import router from "./router/main.router";
+//import router from "./router/main.router";
 import cors from "cors";
 import { PORT } from "../common/constants/common.constants";
 import workingController from "./controller/work/work.controller";
@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 // app.use("/*",router); - chỉ dùng với đối tượng app.router, ở đây đang dùng socket với htttp createserver
 //tất cả các đường url đều render ra reactjs
 //client và server giao tipees qua socket
-app.all("/*",router);
+//app.all("/*", router);
 
 //socket
 const http = require('http');
@@ -41,6 +41,6 @@ const server = http.createServer(app);
 // });
 
 
-workingController(server);
+workingController(server, app);
 
 server.listen(app.get('port'), () => console.log("######## app running on port " + PORT + " ########"));

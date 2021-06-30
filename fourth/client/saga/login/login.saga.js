@@ -4,13 +4,33 @@ import { LOGIN, OPEN_HOME_SCREEN, LOGIN_ERROR, LOGGINGIN } from "../../action/lo
 import { LOGIN_STATUS_TEXT } from "../../constants/login/login.constant";
 import { loginConstant } from "../../constants/login/login.constant";
 import socketClient from "../../service/socket/socket.client.service";
-import { SOCKET_LOGIN, MAIN_URL, SOCKET_LOGIN_INCORRECT, SOCKET_LOGIN_STATUS, SOCKET_SOMETHING_ERROR } from "../../../common/constants/common.constants";
+import { 
+    SOCKET_LOGIN, 
+    MAIN_URL, 
+    SOCKET_LOGIN_INCORRECT, 
+    SOCKET_LOGIN_STATUS, 
+    SOCKET_SOMETHING_ERROR,
+    SOCKET_INTERVAL_EACH_PHONE_URL  } from "../../../common/constants/common.constants";
 
 // connect to server
 const socket = new socketClient(MAIN_URL);
 
 const loginSocket = function (data) {
     console.log("loginSocket", data);
+    // return eventChannel(emitter => {
+
+    //     let sseTest = sseClient(MAIN_URL + SOCKET_INTERVAL_EACH_PHONE_URL + "?data=123");
+    //     sseTest.connect((data) => {
+    //             console.log("rêcive",data);
+    //             console.log("rêcive",JSON.parse(data.data));
+    //             emitter(data);
+    //     });
+
+    //     return () => {
+    //         //unscrible
+    //     };
+
+    // });
     return eventChannel(emitter => {
         //gửi
         socket.send(SOCKET_LOGIN, { username: data.data.username, password: data.data.password });

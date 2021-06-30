@@ -1,5 +1,9 @@
 import { LOGIN_URL, HOME_URL } from "../../constants/work/work.constants";
-import { SOCKET_SOMETHING_ERROR, SOCKET_LOGIN_INCORRECT, SOCKET_LOGIN_STATUS } from "../../../common/constants/common.constants";
+import { 
+    SOCKET_SOMETHING_ERROR, 
+    SOCKET_LOGIN_INCORRECT, 
+    SOCKET_LOGIN_STATUS
+} from "../../../common/constants/common.constants";
 
 
 const DEFAULT_DELAY = 2000;

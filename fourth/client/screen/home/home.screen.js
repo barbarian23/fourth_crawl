@@ -72,9 +72,9 @@ export default function Home() {
         } else {
             if (listPhone) {
                 listPhone.forEach((element, index) => {
-                    console.log("element is", element);
+                    //console.log("element is", element);
                     if (element.phone.includes(e.target.value)) {
-                        console.log("found", index);
+                        //console.log("found", index);
                         dispatch({
                             type: SEARCH_PHONE,
                             data: index,
@@ -157,10 +157,12 @@ export default function Home() {
                         <div className="div-noti-phone-parent">
                             <span id="span-noti-phone">Thay đổi mới nhất</span>
                             <div className="div-noti-phone">{
-                                notiPhone.map((item, index) => {
+                               notiPhone ? notiPhone.map((item, index) => {
                                     //console.log("thay doi moi nhat",index, item);
                                     return <text>Tài khoản chính của thuê bao <span className="noti-item-phone">{item.phone}</span> là <span className="noti-item-">{item.info}</span> (lớn hơn {item.money})</text>
                                 })
+                                :
+                                null
                             }
                             </div>
                         </div>

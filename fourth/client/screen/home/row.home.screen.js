@@ -16,6 +16,19 @@ export default function Row(props) {
     //giá trị hiện tại của info
     let [currentInfo, setCurrentInfo] = useState(false);
 
+    let sendTelegram = (data) => {
+        requestPost(URL_BOT_TELEGRAM,
+            {
+                chat_id: ID_CHANNEL_TELEGRAM,
+                text: "Tài khoản chính của thuê bao " + data.phone + " là " + data.info + " (lớn hơn " + data.money + ")",
+            }, (res) => {
+                console.log("send telegram successfully ", "Tài khoản chính của thuê bao " + data.phone + " là " + data.info + " (lớn hơn " + data.money + ")");
+            },
+            (err) => {
+                console.log("send telegram failure ", err);
+            });
+    }
+
     //check giá trị khi info thay đổi
     useEffect(() => {
         //nếu là -1 , có lẽ lỗi mạng cmnr
@@ -45,7 +58,8 @@ export default function Row(props) {
                         money: money,
                         info: info,
                     }
-                })
+                });
+                sendTelegram(data);
             }
 
         }
@@ -113,24 +127,13 @@ export default function Row(props) {
         audio.play()
     }
 
-    let sendTelegram = (data) => {
-        requestPost(URL_BOT_TELEGRAM,
-            {
-                chat_id: ID_CHANNEL_TELEGRAM,
-                text: "Tài khoản chính của thuê bao " + data.phone + " là " + data.info + " (lớn hơn " + data.money + ")",
-            }, (res) => {
-                console.log("send telegram successfully ", res);
-            },
-            (err) => {
-                console.log("send telegram failure ", err);
-            });
-    }
-    useEffect(() => {
-        if (Number.parseFloat(data.info) >= Number.parseFloat(data.money)) {
-            // playSound();
-            sendTelegram(data);
-        }
-    }, [data.info]);
+
+    // useEffect(() => {
+    //     if (Number.parseFloat(data.info) >= Number.parseFloat(data.money)) {
+    //         // playSound();
+    //         sendTelegram(data);
+    //     }
+    // }, [data.info]);
 
     if (!isEdited) {
         return (
@@ -138,7 +141,7 @@ export default function Row(props) {
                 <td>{index + 1}</td>
                 <td ref={makeColor} >{phone}</td>
                 <td>{money}</td>
-                <td>{currentInfo + " - " + info}
+                <td>{currentInfo}
                     {/* {playSound(Number.parseFloat(data.info))} */}
                 </td>
                 <td>
