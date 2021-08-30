@@ -31,6 +31,6 @@ export const SOCKET_SETINTERVALED_PHONE = "SOCKET_SETINTERVALED_PHONE";
 export const SOCKET_INTERVAL_ALL_PHONE_URL = "/intervalAllInfo";
 export const SOCKET_INTERVAL_EACH_PHONE_URL = "/intervalEachInfo";
 //chung
-export const PORT = 2756;
+export const PORT = 2956;
 export const MAIN_URL = "http://localhost:" + PORT;
 export const ECLECTRON_LOAD = "http://localhost:" + PORT;

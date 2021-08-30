@@ -106,10 +106,12 @@ export default function homeReducer(state = initialState, action) {
             // check null cho chac
             // co truong hop server k tra ve/ tra ve k kip data
             // console.log("tempPhone is ", tempPhone,);
-            // do có lỗi index bị truyền từ server xuống client sai, nên mình check xem action.data.data có bằng tempPhone[action.data.index].data không
-            if (action.data && tempPhone[action.data.index] && tempPhone[action.data.index].data == action.data.data) {
+            // do có lỗi index bị truyền từ server xuống client sai, nên mình check xem action.data.phone có bằng tempPhone[action.data.index].phone không
+            
+            if (action.data && tempPhone[action.data.index] && tempPhone[action.data.index].phone == action.data.phone) {
                 tempPhone[action.data.index].info = action.data.info;
             }
+            
             return {
                 ...state,
                 listPhone: [...tempPhone],

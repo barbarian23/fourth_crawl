@@ -246,6 +246,7 @@ const setIntervalPhone = function* (action){
                data: {
                     info: responce.info,
                     index: responce.index,
+                    phone: responce.phone
                 }
            })
        }
