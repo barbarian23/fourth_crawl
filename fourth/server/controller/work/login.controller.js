@@ -37,7 +37,7 @@ async function doLogin(username, password, socket, driver) {
         await driver.$eval(selector, (el, value) => el.value = value, password);
 
         // select to button login & click button
-        selector = "body #ctl01 .page .main .accountInfo #MainContent_LoginUser_LoginButton";
+        selector = "body #ctl01 .page .main .accountInfo #MainContent_LoginUser_LoginButton1";
         await Promise.all([driver.click(selector), driver.waitForNavigation({ waitUntil: 'networkidle0' })]);
 
         await timer(2000);

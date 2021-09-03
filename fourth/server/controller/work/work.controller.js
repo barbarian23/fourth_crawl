@@ -213,7 +213,10 @@ const getNumberInfo = async (phone, info) => {
             //lấy ra các tr
             let listTr = await getListTrInTable(htmlContent);
 
-            //console.log("listTr", listTr.length);
+            // console.log("listTr", listTr);
+            // if (listTr) {
+            //     console.log("listTr", listTr[0], listTr[1], listTr[2], listTr[3], listTr[4], listTr[5]);
+            // }
             //lấy ra số điện thoại, có thể bao gồm với các ngoặc ><. dùng tr thứ 5
             // ["<tr>15000</tr>"]
             let numberSpecial = listTr && listTr[5] ? await getMiddleNumber(listTr[5]) : [info];
@@ -253,11 +256,11 @@ const inJectGetPhone = async () => {
 
             'let second = document.querySelector("#ctl01 > div:nth-child(4)").getElementsByTagName("input");' +
 
-            'form = form + second[0].id + "=" + encodeURIComponent(second[0].value) + "&ctl00%24MainContent%24msisdn="+phone+"&ctl00%24MainContent%24submit_button=T%C3%ACm+ki%E1%BA%BFm";' +
+            'form = form + second[0].id + "=" + encodeURIComponent(second[0].value) + "&ctl00%24MainContent%24msisdn="+phone+"&ctl00%24MainContent%24submit_button1=T%C3%ACm+ki%E1%BA%BFm";' +
 
             'let formData = new FormData();' +
             'formData.append("", form);' +
-            'fetch("https://10.156.0.19/Account/Subs_info_120days.aspx", {' +
+            'fetch("https://10.156.0.19/Account/Subs_info.aspx", {' +
             'method: "POST",' +
             'headers: {' +
             '"Content-Type": "application/x-www-form-urlencoded",' +
