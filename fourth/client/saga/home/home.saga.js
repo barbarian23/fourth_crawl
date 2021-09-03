@@ -38,19 +38,19 @@ const socket = new socketClient(MAIN_URL);
 const homeSocket = function (data) {
     
     //cái mới dùng server sent event
-    return eventChannel(emitter => {
+    // return eventChannel(emitter => {
 
-        let sseTest = sseClient(MAIN_URL + SOCKET_INTERVAL_EACH_PHONE_URL + "?phone=" + data.data.phone + "&money=" + data.data.money);
-        sseTest.connect((data) => {
-                data = data ? JSON.parse(data.data) : '';
-                emitter(data || '');
-        });
+    //     let sseTest = sseClient(MAIN_URL + SOCKET_INTERVAL_EACH_PHONE_URL + "?phone=" + data.data.phone + "&money=" + data.data.money);
+    //     sseTest.connect((data) => {
+    //             data = data ? JSON.parse(data.data) : '';
+    //             emitter(data || '');
+    //     });
 
-        return () => {
-            //unscrible
-        };
+    //     return () => {
+    //         //unscrible
+    //     };
 
-    });
+    // });
 
     // console.log("homeSocket", data);
     //cái cũ dùng socket
@@ -206,19 +206,19 @@ const editPhone = function* (action){
 const setIntervalPhoneSocket = function(data){
     console.log("setinterval listphone socket", data.data);
      //cái mới dùng server sent event
-     return eventChannel(emitter => {
+    //  return eventChannel(emitter => {
 
-        let sseTest = sseClient(MAIN_URL + SOCKET_INTERVAL_ALL_PHONE_URL);
-        sseTest.connect((data) => {
-                data = data ? JSON.parse(data.data) : '';
-                emitter(data || '');
-        });
+    //     let sseTest = sseClient(MAIN_URL + SOCKET_INTERVAL_ALL_PHONE_URL);
+    //     sseTest.connect((data) => {
+    //             data = data ? JSON.parse(data.data) : '';
+    //             emitter(data || '');
+    //     });
 
-        return () => {
-            //unscrible
-        };
+    //     return () => {
+    //         //unscrible
+    //     };
 
-    });
+    // });
     //cái cũ dùng socket
    return eventChannel(emitter => {
        socket.send(SOCKET_SETINTERVAL_PHONE,{listPhone: data.data});

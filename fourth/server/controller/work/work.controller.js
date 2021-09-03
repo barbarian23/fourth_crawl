@@ -31,7 +31,7 @@ const puppeteer = require('puppeteer');
 //C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe
 //C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe
 //C:\Program Files (x86)\Google\Chrome\Application
-let exPath = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe";
+let exPath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 var driver;
 
 //biến đếm số lần chạy interval, nếu số lần chạy interval quá lướn, có thể khiến trình duyệt bị điw
@@ -123,7 +123,7 @@ const workingController = async function (server, app) {
 
             //chuyển qua server sent event - SOCKET_SETINTERVALED_PHONE_URL
             // add number
-            //receive.on(SOCKET_WORKING_SINGLE_NUMBER, addNumber);
+            receive.on(SOCKET_WORKING_SINGLE_NUMBER, addNumber);
 
             // thêm sdt, số tiền qua file excel
             receive.on(SOCKET_WORKING_SOME_NUMBER, addSomeNumber);
@@ -136,7 +136,7 @@ const workingController = async function (server, app) {
 
             //chuyển qua server sent event - SOCKET_SETINTERVALED_PHONE_URL
             // setinterval
-            //receive.on(SOCKET_SETINTERVAL_PHONE, prepareInterval);
+            receive.on(SOCKET_SETINTERVAL_PHONE, prepareInterval);
         });
 
         app.all("/*", router);
@@ -328,7 +328,7 @@ const duplicateNumber = num => {
 
 //===========================================================================================================================================
 //cái cũ dùng socket
-/*
+
 const addNumber = async function (data) {
 
     //kiểm tra có bị trùng
@@ -381,8 +381,9 @@ const addNumber = async function (data) {
     }
 
 }
-*/
+
 //cái mới dùng server sent event
+/*
 const addNumber = async function (data, res) {
     let eachInfoSSE = sseServer(res);
     await eachInfoSSE.sendData({ info: "f", index: "t", phone: "d"  });
@@ -440,7 +441,7 @@ const addNumber = async function (data, res) {
     }
 
 }
-
+*/
 
 
 //===========================================================================================================================================
@@ -517,47 +518,49 @@ const removeIntervalForLightenWeb = async () => {
 
 //cái cũ dùng socket
 //===================================================================================================================================
-// const setIntervalPhone = async function () {
-//     try {
-//         //inject hàm getPhone
-//         await inJectGetPhone();
+const setIntervalPhone = async function () {
+    try {
+        //inject hàm getPhone
+        await inJectGetPhone();
 
-//         //await removeIntervalForLightenWeb();
+        //await removeIntervalForLightenWeb();
 
-//         await socket.send(SOCKET_LOG, { message: "setIntervalPhone" });
-//         //console.log("data in server", arrayNumber);
-//         arrayNumber.forEach(async (item, index) => {
-//             //goi lan dau
+        await socket.send(SOCKET_LOG, { message: "setIntervalPhone" });
+        //console.log("data in server", arrayNumber);
+        arrayNumber.forEach(async (item, index) => {
+            //goi lan dau
 
-//             let intervalTime = calculatorTime(index);
-//             setTimeout(async () => {
-//                 try {
-//                     item.info = await getNumberInfo(item.phone, item.info);
-//                     console.log("server found that phone", item.phone, "with money", item.info, "index", index);
-//                     await socket.send(SOCKET_SETINTERVALED_PHONE, { info: item.info, index: index, phone: item.phone });
-//                 } catch (e) {
-//                     await socket.send(SOCKET_SETINTERVALED_PHONE, { info: -1, index: index, phone: item.phone });
-//                 }
-//             }, intervalTime - WAIT_TIME);
+            let intervalTime = calculatorTime(index);
+            setTimeout(async () => {
+                try {
+                    item.info = await getNumberInfo(item.phone, item.info);
+                    console.log("server found that phone", item.phone, "with money", item.info, "index", index);
+                    await socket.send(SOCKET_SETINTERVALED_PHONE, { info: item.info, index: index, phone: item.phone });
+                } catch (e) {
+                    await socket.send(SOCKET_SETINTERVALED_PHONE, { info: -1, index: index, phone: item.phone });
+                }
+            }, intervalTime - WAIT_TIME);
 
-//             item.interval = setInterval(async () => {
-//                 countInterval++;
-//                 let idx = findIndex(item.phone);
-//                 try {
-//                     item.info = await getNumberInfo(item.phone, item.info);
-//                     console.log("server found that phone", item.phone, "with money", item.info, "index", index);
-//                     await socket.send(SOCKET_SETINTERVALED_PHONE, { info: item.info, index: idx, phone: item.phone });
-//                 } catch (e) {
-//                     await socket.send(SOCKET_SETINTERVALED_PHONE, { info: -1, index: idx, phone: item.phone });
-//                 }
-//             }, intervalTime);
-//         });
-//     } catch (e) {
-//         console.log("setIntervalPhone", e);
-//         await socket.send(SOCKET_LOG, { message: "loi " + e });
-//     }
-// }
+            item.interval = setInterval(async () => {
+                countInterval++;
+                let idx = findIndex(item.phone);
+                try {
+                    item.info = await getNumberInfo(item.phone, item.info);
+                    console.log("server found that phone", item.phone, "with money", item.info, "index", index);
+                    await socket.send(SOCKET_SETINTERVALED_PHONE, { info: item.info, index: idx, phone: item.phone });
+                } catch (e) {
+                    await socket.send(SOCKET_SETINTERVALED_PHONE, { info: -1, index: idx, phone: item.phone });
+                }
+            }, intervalTime);
+        });
+    } catch (e) {
+        console.log("setIntervalPhone", e);
+        await socket.send(SOCKET_LOG, { message: "loi " + e });
+    }
+}
 
+//===================================================================================================================================
+/*
 const setIntervalPhone = async function (res) {
     try {
         let allInfoSSE = sseServer(res);
@@ -577,7 +580,7 @@ const setIntervalPhone = async function (res) {
                     item.info = await getNumberInfo(item.phone, item.info);
                     console.log("server found that phone", item.phone, "with money", item.info, "index", index);
                     await allInfoSSE.sendData({ info: item.info, index: index, phone: item.phone });
-                    // await socket.send(SOCKET_SETINTERVALED_PHONE, { info: item.info, index: index, phone: item.phone });
+                    //await socket.send(SOCKET_SETINTERVALED_PHONE, { info: item.info, index: index, phone: item.phone });
                 } catch (e) {
                     await allInfoSSE.sendData({ info: -1, index: index, phone: item.phone });
                     //await socket.send(SOCKET_SETINTERVALED_PHONE, { info: -1, index: index, phone: item.phone });
@@ -603,7 +606,7 @@ const setIntervalPhone = async function (res) {
         await socket.send(SOCKET_LOG, { message: "loi " + e });
     }
 }
-
+*/
 //============================================================================================================================================
 const removeAllInterval = async function (data) {
     try {
